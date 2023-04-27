@@ -20,7 +20,7 @@ public class EncryptService {
     
     
     public static String encryptPass(String password) {
-       MessageDigest md;
+        MessageDigest md;
         try {
             md = MessageDigest.getInstance("MD5");
             byte[] messageDigest = md.digest(password.getBytes());

@@ -4,6 +4,8 @@
   <persistence-unit name="my_persistence_unit" transaction-type="JTA">
     <jta-data-source>java:/smilifyApp</jta-data-source>
     <class>ENTITIES.Usuario</class>
+    <class>ENTITIES.Paciente</class>
+    <class>ENTITIES.Configuracion</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
  

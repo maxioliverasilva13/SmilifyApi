@@ -35,7 +35,7 @@ public class AuthInterceptor implements ContainerRequestFilter {
             request.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(res).build());
             return;
         }
-        /*
+        /* pendiente validar que el usuario exista
         Long  id = JWT.getInstance().getUserIdByToken(token);    
         UsuarioFacadeREST u = new UsuarioFacadeREST();
         if(u.find(id) == null){
