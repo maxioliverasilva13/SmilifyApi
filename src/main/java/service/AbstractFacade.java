@@ -18,6 +18,8 @@ public abstract class AbstractFacade<T> {
 
     private Class<T> entityClass;
 
+    
+
     public AbstractFacade(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
@@ -64,6 +66,9 @@ public abstract class AbstractFacade<T> {
         return ((Long) q.getSingleResult()).intValue();
     }
     
+     
+     
+    
      public Usuario validarUsuario(String email,String password){
          javax.persistence.criteria.CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
          javax.persistence.criteria.CriteriaQuery query = builder.createQuery(Usuario.class);
@@ -98,4 +103,5 @@ public abstract class AbstractFacade<T> {
    
     }
     
+     
 }

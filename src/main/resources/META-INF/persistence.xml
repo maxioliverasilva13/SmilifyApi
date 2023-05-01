@@ -6,7 +6,15 @@
     <class>ENTITIES.Usuario</class>
     <class>ENTITIES.Paciente</class>
     <class>ENTITIES.Configuracion</class>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <class>ENTITIES.Reserva</class>
+    <class>ENTITIES.Tratamiento</class>
+    <class>ENTITIES.Consulta</class>
+    <class>ENTITIES.CategoriaArancel</class>
+    <class>ENTITIES.Archivo</class>
+    <class>ENTITIES.ArancelPrivado</class>
+    <class>ENTITIES.ArancelColectivo</class>
+    <class>ENTITIES.Arancel</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
  
 

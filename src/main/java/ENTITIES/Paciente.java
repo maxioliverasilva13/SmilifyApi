@@ -5,6 +5,7 @@
 package ENTITIES;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -58,17 +59,15 @@ public class Paciente implements Serializable {
     private List<Archivo> archivos;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.LAZY,orphanRemoval=true)
-    private List<Reserva> reservas; 
+    private List<Reserva> reservas;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.LAZY,orphanRemoval=true)
-    private List<Tratamiento> tratamientos; 
+    private List<Tratamiento> tratamientos;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.LAZY,orphanRemoval=true)
-    private List<Consulta> consultas; 
+    private List<Consulta> consultas;
      
 
-    
-    
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario usuario;
     
@@ -115,6 +114,10 @@ public class Paciente implements Serializable {
         return this.consultas;
     }
     
+    public List<Tratamiento> getTratamientos(){
+        return this.tratamientos;
+    }
+    
     public void setNombre(String nombre){
         this.nombre = nombre;
     }
@@ -122,7 +125,7 @@ public class Paciente implements Serializable {
         this.apellido = apellido;
     }
     public void setDireccion(String direccion){
-        this.nombre = nombre;
+        this.direccion = direccion;
     }
     public void setTelefono(String telefono){
         this.telefono = telefono;
@@ -146,6 +149,11 @@ public class Paciente implements Serializable {
     public void setConsultas(List<Consulta> consultas){
         this.consultas = consultas;
     }
+    
+     public void setTratamientos(List<Tratamiento> tratamientos){
+        this.tratamientos = tratamientos;
+    }
+
 
     
        
