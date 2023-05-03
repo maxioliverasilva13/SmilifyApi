@@ -30,9 +30,7 @@ public abstract class AbstractFacade<T> {
         this.em = Persistence.createEntityManagerFactory("my_persistence_unit").createEntityManager();
     }
 
-    public EntityManager getEntityManager() {
-        return this.em;
-    }
+    protected abstract EntityManager getEntityManager();
 
     public void create(T entity) {
         

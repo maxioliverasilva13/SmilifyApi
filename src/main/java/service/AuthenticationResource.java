@@ -15,6 +15,8 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.json.JsonObject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
@@ -36,6 +38,10 @@ public class AuthenticationResource extends AbstractFacade<Usuario> {
     /**
      * Creates a new instance of AuthenticationResource
      */
+    
+    @PersistenceContext(unitName = "my_persistence_unit")
+    private EntityManager em;
+    
     public AuthenticationResource() {
         super(Usuario.class);
     }
@@ -86,6 +92,11 @@ public class AuthenticationResource extends AbstractFacade<Usuario> {
         super.create(user);
         res = new ResponseMessage(201, "Usuario Creado correctamente");
         return Response.status(201).entity(res).build();  
+    }
+    
+    @Override
+    protected EntityManager getEntityManager() {
+        return this.em;
     }
     
     @GET

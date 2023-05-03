@@ -30,6 +30,9 @@ import javax.ws.rs.core.MediaType;
 @Path("entities.usuario")
 public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
     
+    @PersistenceContext(unitName = "my_persistence_unit")
+    private EntityManager em;
+    
     public UsuarioFacadeREST() {
         super(Usuario.class);
     }
@@ -89,7 +92,7 @@ public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
 
     @Override
     protected EntityManager getEntityManager() {
-        return em;
+        return this.em;
     }
 
 }
