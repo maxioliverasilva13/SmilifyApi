@@ -8,7 +8,10 @@ import ENTITIES.Usuario;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -26,10 +29,7 @@ import javax.ws.rs.core.MediaType;
 @Stateless
 @Path("entities.usuario")
 public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
-
-    @PersistenceContext(unitName = "my_persistence_unit")
-    private EntityManager em;
-
+    
     public UsuarioFacadeREST() {
         super(Usuario.class);
     }
@@ -52,6 +52,11 @@ public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
         super.remove(super.find(id));
+    }
+    
+    public Usuario getUserById(Long id) {
+        Usuario user = (Usuario)super.find(id);
+        return user;
     }
 
     @GET
@@ -86,5 +91,5 @@ public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }

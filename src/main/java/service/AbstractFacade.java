@@ -8,6 +8,9 @@ import ENTITIES.Usuario;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import util.EncryptService;
 
 /**
@@ -17,14 +20,19 @@ import util.EncryptService;
 public abstract class AbstractFacade<T> {
 
     private Class<T> entityClass;
+    @PersistenceContext(unitName = "my_persistence_unit", type = PersistenceContextType.TRANSACTION)
+    private EntityManager em;
 
     
 
     public AbstractFacade(Class<T> entityClass) {
         this.entityClass = entityClass;
+        this.em = Persistence.createEntityManagerFactory("my_persistence_unit").createEntityManager();
     }
 
-    protected abstract EntityManager getEntityManager();
+    public EntityManager getEntityManager() {
+        return this.em;
+    }
 
     public void create(T entity) {
         

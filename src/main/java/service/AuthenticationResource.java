@@ -15,9 +15,10 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.json.JsonObject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -32,22 +33,13 @@ import util.JWT;
 @Path("authentication")
 @Stateless
 public class AuthenticationResource extends AbstractFacade<Usuario> {
-
-    @PersistenceContext(unitName = "my_persistence_unit")
-    private EntityManager em;
-
     /**
      * Creates a new instance of AuthenticationResource
      */
     public AuthenticationResource() {
         super(Usuario.class);
     }
-    
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-    
+ 
     @PUT
     @Consumes(MediaType.APPLICATION_XML)
     public void putXml(String content) {
@@ -94,7 +86,18 @@ public class AuthenticationResource extends AbstractFacade<Usuario> {
         super.create(user);
         res = new ResponseMessage(201, "Usuario Creado correctamente");
         return Response.status(201).entity(res).build();  
-
+    }
+    
+    @GET
+    @Path("current_user")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response current_user(@Context HttpHeaders httpHeaders){
+        // ResponseMessage res;
+        String token = httpHeaders.getHeaderString("Authorization");
+         Long  uid = JWT.getInstance().getUserIdByToken(token); 
+         Usuario user = super.find(uid);
+        return Response.status(201).entity(user).build();  
     }
 
     
