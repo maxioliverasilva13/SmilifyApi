@@ -62,12 +62,11 @@ public class AuthenticationResource extends AbstractFacade<Usuario> {
         claims.put("id", user.getId());
         claims.put("email",user.getEmail());
         JsonObject token = JWT.getInstance().encode(claims);
-        
-        
        
+        
         return Response.status(200).entity(token).build();
 
-        
+         
     }
     
   

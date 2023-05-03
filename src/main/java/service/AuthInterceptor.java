@@ -4,8 +4,17 @@
  */
 package service;
 
+import ENTITIES.Usuario;
 import dtos.ResponseMessage;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.List;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Response;
@@ -18,11 +27,14 @@ import util.JWT;
  */
 @Provider
 public class AuthInterceptor implements ContainerRequestFilter {
+    @PersistenceContext( unitName = "my_persistence_unit")
+    private EntityManager entityManager;
 
+   
     @Override
     public void filter(ContainerRequestContext request) throws IOException {
-        try {
-             request.getHeaders().putSingle("Access-Control-Allow-Origin", "*");
+            request.getHeaders().putSingle("Access-Control-Allow-Origin", "*");
+
             request.getHeaders().putSingle("Access-Control-Allow-Credentials", "true");
             request.getHeaders().putSingle("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS, HEAD");
             request.getHeaders().putSingle("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
@@ -43,20 +55,22 @@ public class AuthInterceptor implements ContainerRequestFilter {
                 request.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(res).build());
                 return;
             }
+            
+            
+            Long  uid = JWT.getInstance().getUserIdByToken(token); 
+            List<Usuario> usuariosResult = this.entityManager.
+                    createNativeQuery("Select * from usuario WHERE id=:id", Usuario.class).
+                    setParameter("id", uid).getResultList();
+            
+            if(usuariosResult.isEmpty()){
+                ResponseMessage res = new ResponseMessage(401, "Unauthorized");
+                request.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(res).build());
+                return;
+            }
+            
+            Usuario user =  usuariosResult.get(0);
+            request.setProperty("userData", user);
 
-//            Long id = JWT.getInstance().getUserIdByToken(token);
-//            UsuarioFacadeREST u = new UsuarioFacadeREST();
-//            if (u.find(id) == null) {
-//                
-//                ResponseMessage res = new ResponseMessage(401, "Unauthorized");
-//                request.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(res).build());
-//                return;
-//            }
-        } catch (Exception e) {
-            ResponseMessage res = new ResponseMessage(401, "Invalid or Expired token");
-            request.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(res).build());
-            return;
-        }
 
     }
 

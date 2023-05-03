@@ -4,14 +4,11 @@
  */
 package service;
 
-import ENTITIES.Usuario;
+import ENTITIES.Consulta;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -27,24 +24,27 @@ import javax.ws.rs.core.MediaType;
  * @author rodrigo
  */
 @Stateless
-@Path("entities.usuario")
-public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
-    
-    public UsuarioFacadeREST() {
-        super(Usuario.class);
+@Path("entities.consulta")
+public class ConsultaFacadeREST extends AbstractFacade<Consulta> {
+
+    @PersistenceContext(unitName = "my_persistence_unit")
+    private EntityManager em;
+
+    public ConsultaFacadeREST() {
+        super(Consulta.class);
     }
 
     @POST
     @Override
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Usuario entity) {
+    public void create(Consulta entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Long id, Usuario entity) {
+    public void edit(@PathParam("id") Long id, Consulta entity) {
         super.edit(entity);
     }
 
@@ -53,30 +53,25 @@ public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
     public void remove(@PathParam("id") Long id) {
         super.remove(super.find(id));
     }
-    
-    public Usuario getUserById(Long id) {
-        Usuario user = (Usuario)super.find(id);
-        return user;
-    }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Usuario find(@PathParam("id") Long id) {
+    public Consulta find(@PathParam("id") Long id) {
         return super.find(id);
     }
 
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Usuario> findAll() {
+    public List<Consulta> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Usuario> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<Consulta> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 
@@ -91,5 +86,5 @@ public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
     protected EntityManager getEntityManager() {
         return em;
     }
-
+    
 }

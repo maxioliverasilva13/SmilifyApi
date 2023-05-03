@@ -2,7 +2,18 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="my_persistence_unit" transaction-type="JTA">
     <jta-data-source>java:/smilifyApp</jta-data-source>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <class>ENTITIES.Usuario</class>
+    <class>ENTITIES.Paciente</class>
+    <class>ENTITIES.Configuracion</class>
+    <class>ENTITIES.Reserva</class>
+    <class>ENTITIES.Tratamiento</class>
+    <class>ENTITIES.Consulta</class>
+    <class>ENTITIES.CategoriaArancel</class>
+    <class>ENTITIES.Archivo</class>
+    <class>ENTITIES.ArancelPrivado</class>
+    <class>ENTITIES.ArancelColectivo</class>
+    <class>ENTITIES.Arancel</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
     </properties>
   </persistence-unit>

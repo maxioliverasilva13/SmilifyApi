@@ -6,12 +6,17 @@ package ENTITIES;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
@@ -54,6 +59,11 @@ public class Usuario implements Serializable {
     @Basic
     private String password;
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.LAZY,orphanRemoval=true)
+    private List<Paciente> pacientes;
+    
+    @OneToOne(mappedBy="usuario")
+    Configuracion configuracion;
   
 
     public Long getId() {
@@ -88,6 +98,12 @@ public class Usuario implements Serializable {
         return this.password;
     }
     
+    public List<Paciente> getPacientes(){
+        return this.pacientes;
+    }
+    public Configuracion getConfiguracion(){
+        return this.configuracion;
+    }    
     public void setNombre(String nombre){
         this.nombre = nombre;
     }
@@ -107,6 +123,13 @@ public class Usuario implements Serializable {
      public void setPassword(String password){
         this.password = password;
     }
+     
+    public void setPacientes(List<Paciente> pacientes){
+        this.pacientes = pacientes;
+    }
+    public void getConfiguracion(Configuracion configuracion){
+        this.configuracion =  configuracion;
+    }    
     
     
     
