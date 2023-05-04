@@ -4,6 +4,7 @@
  */
 package service;
 
+import ENTITIES.CategoriaArancel;
 import ENTITIES.Usuario;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -47,6 +48,10 @@ public abstract class AbstractFacade<T> {
 
     public T find(Object id) {
         return getEntityManager().find(entityClass, id);
+    }
+    
+     public CategoriaArancel findArancel(Long id) {
+        return getEntityManager().find(CategoriaArancel.class, id);
     }
 
     public List<T> findAll() {

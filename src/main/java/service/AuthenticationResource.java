@@ -60,7 +60,7 @@ public class AuthenticationResource extends AbstractFacade<Usuario> {
         
         Usuario user = super.validarUsuario(userLogin.getEmail(), userLogin.getPassword());
         if(user == null){
-            ResponseMessage error = new ResponseMessage(401, "email o contraseña invalida");
+            ResponseMessage error = new ResponseMessage(401, "email o contraseña invalidass");
             return Response.status(Status.UNAUTHORIZED).entity(error).build();
         }
        
