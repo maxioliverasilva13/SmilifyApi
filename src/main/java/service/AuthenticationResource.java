@@ -4,6 +4,7 @@
  */
 package service;
 
+import ENTITIES.Configuracion;
 import dtos.UsuarioLoginDTO;
 import ENTITIES.Usuario;
 import dtos.ResponseMessage;
@@ -16,6 +17,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.json.JsonObject;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -41,6 +43,8 @@ public class AuthenticationResource extends AbstractFacade<Usuario> {
     
     @PersistenceContext(unitName = "my_persistence_unit")
     private EntityManager em;
+    
+    
     
     public AuthenticationResource() {
         super(Usuario.class);
@@ -72,7 +76,7 @@ public class AuthenticationResource extends AbstractFacade<Usuario> {
         
         return Response.status(200).entity(token).build();
 
-         
+ 
     }
     
   
@@ -89,7 +93,15 @@ public class AuthenticationResource extends AbstractFacade<Usuario> {
              res = new ResponseMessage(400, "Ya existe un usuario con ese email");
              return Response.status(400).entity(res).build();
         }
-        super.create(user);
+        Configuracion conf = new Configuracion();
+        conf.setPrecioPorOrden(0);
+        conf.setUsuario(user);
+        user.setConfiguracion(conf); 
+        this.getEntityManager().persist(conf); // Primero se guarda la configuracion
+        this.getEntityManager().persist(user); // Primero se guarda la configuracion
+
+
+  
         res = new ResponseMessage(201, "Usuario Creado correctamente");
         return Response.status(201).entity(res).build();  
     }

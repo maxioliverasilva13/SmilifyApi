@@ -47,9 +47,17 @@ public class Configuracion implements Serializable {
         return this.usuario;
     }
     
-    public void setUsuario(){
-        this.usuario = usuario;
+    public double getPrecioPorOrden(){
+        return this.PrecioPorOrden;
     }
+    
+    public void setUsuario(Usuario usuario){
+        this.usuario = usuario; 
+    }
+     public void setPrecioPorOrden(double precioPorOrden){
+        this.PrecioPorOrden = precioPorOrden;
+    }
+    
 
     @Override
     public int hashCode() {
