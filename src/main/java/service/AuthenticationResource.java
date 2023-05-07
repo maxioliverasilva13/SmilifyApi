@@ -19,6 +19,7 @@ import javax.json.JsonObject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
@@ -95,7 +96,7 @@ public class AuthenticationResource extends AbstractFacade<Usuario> {
         }
         Configuracion conf = new Configuracion();
         conf.setPrecioPorOrden(0);
-        conf.setUsuario(user);
+        conf.setUsuario(user);  
         user.setConfiguracion(conf); 
         this.getEntityManager().persist(conf); // Primero se guarda la configuracion
         this.getEntityManager().persist(user); // Primero se guarda la configuracion
@@ -115,11 +116,9 @@ public class AuthenticationResource extends AbstractFacade<Usuario> {
     @Path("current_user")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response current_user(@Context HttpHeaders httpHeaders){
+    public Response current_user(@Context HttpHeaders httpHeaders, @Context HttpServletRequest request){
         // ResponseMessage res;
-        String token = httpHeaders.getHeaderString("Authorization");
-         Long  uid = JWT.getInstance().getUserIdByToken(token); 
-         Usuario user = super.find(uid);
+        Usuario user = (Usuario) request.getAttribute("userData");
         return Response.status(201).entity(user).build();  
     }
 
