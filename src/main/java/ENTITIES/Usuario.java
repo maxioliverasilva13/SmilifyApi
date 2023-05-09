@@ -127,7 +127,7 @@ public class Usuario implements Serializable {
     public void setPacientes(List<Paciente> pacientes){
         this.pacientes = pacientes;
     }
-    public void getConfiguracion(Configuracion configuracion){
+    public void setConfiguracion(Configuracion configuracion){
         this.configuracion =  configuracion;
     }    
     

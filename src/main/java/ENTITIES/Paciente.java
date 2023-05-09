@@ -61,9 +61,7 @@ public class Paciente implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.LAZY,orphanRemoval=true)
     private List<Reserva> reservas;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.LAZY,orphanRemoval=true)
-    private List<Tratamiento> tratamientos;
-    
+ 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.LAZY,orphanRemoval=true)
     private List<Consulta> consultas;
      
@@ -114,10 +112,7 @@ public class Paciente implements Serializable {
         return this.consultas;
     }
     
-    public List<Tratamiento> getTratamientos(){
-        return this.tratamientos;
-    }
-    
+   
     public void setNombre(String nombre){
         this.nombre = nombre;
     }
@@ -150,10 +145,7 @@ public class Paciente implements Serializable {
         this.consultas = consultas;
     }
     
-     public void setTratamientos(List<Tratamiento> tratamientos){
-        this.tratamientos = tratamientos;
-    }
-
+    
 
     
        

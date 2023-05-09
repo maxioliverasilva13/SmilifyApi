@@ -41,7 +41,7 @@ public class AuthInterceptor implements ContainerRequestFilter {
             
             String url = request.getUriInfo().getAbsolutePath().toString();
 
-            if (url.contains("/resources/authentication") && !url.contains("current_user")) {
+            if (url.contains("/resources/authentication")) {
                 return;
             }
             String token = request.getHeaderString("Authorization");

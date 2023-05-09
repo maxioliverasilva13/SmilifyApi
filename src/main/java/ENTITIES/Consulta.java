@@ -39,9 +39,7 @@ public class Consulta implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Paciente paciente;
     
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Tratamiento tratamiento; 
+
     
     @OneToOne
     private Reserva reserva;
