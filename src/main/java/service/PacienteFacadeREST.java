@@ -105,6 +105,19 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
         return result;
         
     }
+     @GET
+     @Path("/listado")
+     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+     public List<PacienteDTO> listado() {
+        List<Paciente> pacientes = super.findAll();
+        List<PacienteDTO> result =  new ArrayList<PacienteDTO>();
+ 
+        pacientes.forEach(paciente ->{
+            result.add(new PacienteDTO(paciente.getId(), paciente.getNombre(),paciente.getApellido(),paciente.getTelefono(), paciente.getDireccion(), paciente.getFechaDeNacimiento()));
+        });
+        return result;
+        
+    }
 
     @GET
     @Path("{from}/{to}")
