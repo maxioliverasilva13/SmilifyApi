@@ -64,6 +64,10 @@ public class Paciente implements Serializable {
  
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.LAZY,orphanRemoval=true)
     private List<Consulta> consultas;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.LAZY,orphanRemoval=true)
+    private List<Consulta> tratamientos; 
+    
      
 
     @ManyToOne(fetch = FetchType.LAZY)
