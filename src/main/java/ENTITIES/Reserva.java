@@ -33,7 +33,7 @@ public class Reserva implements Serializable {
      
     @Column
     @Basic
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.DATE)
     private Date fecha;
     
     @Column
