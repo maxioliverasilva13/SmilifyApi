@@ -33,12 +33,12 @@ public class AuthInterceptor implements ContainerRequestFilter {
    
     @Override
     public void filter(ContainerRequestContext request) throws IOException {
-            request.getHeaders().putSingle("Access-Control-Allow-Origin", "*");
-
-            request.getHeaders().putSingle("Access-Control-Allow-Credentials", "true");
-            request.getHeaders().putSingle("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS, HEAD");
-            request.getHeaders().putSingle("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
-            
+//            request.getHeaders().putSingle("Access-Control-Allow-Origin", "*");
+//
+//            request.getHeaders().putSingle("Access-Control-Allow-Credentials", "true");
+//            request.getHeaders().putSingle("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS, HEAD");
+//            request.getHeaders().putSingle("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With");
+//            
             String url = request.getUriInfo().getAbsolutePath().toString();
 
             if (url.contains("/resources/authentication") && !url.contains("/current_user")) {

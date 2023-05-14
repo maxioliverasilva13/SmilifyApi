@@ -94,7 +94,7 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     public List<PacienteDTO> listar() {
         List<Paciente> pacientes = super.findAll();
         List<PacienteDTO> result =  new ArrayList<PacienteDTO>();

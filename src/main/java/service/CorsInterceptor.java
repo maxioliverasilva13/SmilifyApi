@@ -37,5 +37,7 @@ public class CorsInterceptor implements ContainerResponseFilter {
           responseContext.getHeaders().add(
             "Access-Control-Allow-Methods", 
             "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+
     }
+    
 }
