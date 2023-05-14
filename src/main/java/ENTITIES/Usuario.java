@@ -4,7 +4,9 @@
  */
 package ENTITIES;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -59,8 +61,9 @@ public class Usuario implements Serializable {
     @Basic
     private String password;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.LAZY,orphanRemoval=true)
-    private List<Paciente> pacientes;
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    private List<Paciente> pacientes = new ArrayList<>();
     
     @OneToOne(mappedBy="usuario")
     Configuracion configuracion;
