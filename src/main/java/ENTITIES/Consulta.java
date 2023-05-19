@@ -37,16 +37,19 @@ public class Consulta implements Serializable {
     private boolean pago;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    private Paciente paciente;
+    private Paciente paciente; 
     
 
-    
     @OneToOne
     private Reserva reserva;
     
     
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Tratamiento tratamiento;
     
-
+    
+   
+   
     
 
     public Long getId() {
@@ -62,6 +65,18 @@ public class Consulta implements Serializable {
         return this.pago;
     }
     
+    public Paciente getPaciente(){
+        return this.paciente;
+    }
+    
+    public Reserva getReserva(){
+        return this.reserva;
+    }
+    
+    public Tratamiento getTratamiento(){
+        return this.tratamiento;
+    }
+    
     public void setId(Long id) {
         this.id = id;
     }
@@ -74,6 +89,18 @@ public class Consulta implements Serializable {
         this.pago = pago;
     }
   
+     public void setPaciente(Paciente paciente){
+        this.paciente = paciente;
+     }
+     
+      public void setReserva(Reserva reserva){
+        this.reserva = reserva;
+     }
+      
+       public void setTratamiento(Tratamiento tratamiento){
+        this.tratamiento = tratamiento;
+     }
+    
     
     @Override
     public int hashCode() {
