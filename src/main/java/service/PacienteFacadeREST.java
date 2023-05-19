@@ -117,7 +117,7 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
         List<PacienteDTO> result =  new ArrayList<PacienteDTO>();
  
         pacientes.forEach(paciente ->{
-            result.add(new PacienteDTO(paciente.getId(), paciente.getNombre(),paciente.getApellido(),paciente.getTelefono(), paciente.getDireccion(), paciente.getFechaDeNacimiento()));
+            result.add(new PacienteDTO(paciente.getId(), paciente.getNombre(),paciente.getApellido(),paciente.getTelefono(), paciente.getUsuario().getEmail(), paciente.getDireccion(), paciente.getFechaDeNacimiento()));
         });
         return result;
         
@@ -151,7 +151,7 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
         for (Consulta consulta : consultasArr) {
             Paciente paciente = consulta.getPaciente();
             PacienteDTO pacienteDto = new PacienteDTO(paciente.getId(), paciente.getNombre(),
-                    paciente.getApellido(), paciente.getTelefono(), paciente.getDireccion(),
+                    paciente.getApellido(), paciente.getTelefono(), paciente.getUsuario().getEmail(), paciente.getDireccion(),
                     paciente.getFechaDeNacimiento());
             result.add(new ConsultaDTO(consulta.getId(), consulta.getDescripcion(),
                     consulta.getPago(), pacienteDto));

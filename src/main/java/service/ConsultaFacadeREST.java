@@ -79,7 +79,7 @@ public class ConsultaFacadeREST extends AbstractFacade<Consulta> {
             }
             super.create(newConsulta);
 
-            PacienteDTO pacienteDto = new PacienteDTO(paciente.getId(),paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getDireccion(), paciente.getFechaDeNacimiento());
+            PacienteDTO pacienteDto = new PacienteDTO(paciente.getId(),paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getUsuario().getEmail(), paciente.getDireccion(), paciente.getFechaDeNacimiento());
             ConsultaDTO  consultaDto = new ConsultaDTO(newConsulta.getId(), newConsulta.getDescripcion(), newConsulta.getPago(), pacienteDto );
 
             return Response.status(Response.Status.CREATED).entity(consultaDto).build();
@@ -173,7 +173,7 @@ public class ConsultaFacadeREST extends AbstractFacade<Consulta> {
         }
         
        Paciente paciente =  consulta.getPaciente();
-       PacienteDTO pacienteDto = new PacienteDTO(paciente.getId(),paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getDireccion(), paciente.getFechaDeNacimiento());
+       PacienteDTO pacienteDto = new PacienteDTO(paciente.getId(),paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getUsuario().getEmail(), paciente.getDireccion(), paciente.getFechaDeNacimiento());
        ConsultaDTO consultaRes = new ConsultaDTO(consulta.getId(),consulta.getDescripcion(), consulta.getPago(),pacienteDto);
        return Response.status(Response.Status.ACCEPTED).entity(consultaRes).build();
     }
@@ -189,7 +189,7 @@ public class ConsultaFacadeREST extends AbstractFacade<Consulta> {
 
         consultasArr.forEach(consulta ->{
             Paciente paciente = consulta.getPaciente();
-            PacienteDTO pacienteDto = new PacienteDTO(paciente.getId(),paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getDireccion(), paciente.getFechaDeNacimiento());
+            PacienteDTO pacienteDto = new PacienteDTO(paciente.getId(),paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getUsuario().getEmail(), paciente.getDireccion(), paciente.getFechaDeNacimiento());
             result.add(new ConsultaDTO(consulta.getId(),consulta.getDescripcion(), consulta.getPago(),pacienteDto));
         });
          
