@@ -119,6 +119,10 @@ public class Usuario implements Serializable {
         this.email = email;
     }
     
+    public void setFechaNacimiento(Date fecha) {
+        this.fechaDeNacimiento = fecha;
+    }
+    
     public void setCelular(String celular){
         this.celular = celular;
     }
@@ -135,9 +139,6 @@ public class Usuario implements Serializable {
     }    
     
     
-    
-    
-
     @Override
     public int hashCode() {
         int hash = 0;
