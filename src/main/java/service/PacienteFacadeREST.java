@@ -4,8 +4,10 @@
  */
 package service;
 
+import ENTITIES.Consulta;
 import ENTITIES.Paciente;
 import ENTITIES.Usuario;
+import dtos.ConsultaDTO;
 import dtos.PacienteCreateDTO;
 import dtos.PacienteDTO;
 import dtos.ResponseMessage;
@@ -17,6 +19,8 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -105,6 +109,19 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
         return result;
         
     }
+     @GET
+     @Path("/listado")
+     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+     public List<PacienteDTO> listado() {
+        List<Paciente> pacientes = super.findAll();
+        List<PacienteDTO> result =  new ArrayList<PacienteDTO>();
+ 
+        pacientes.forEach(paciente ->{
+            result.add(new PacienteDTO(paciente.getId(), paciente.getNombre(),paciente.getApellido(),paciente.getTelefono(), paciente.getDireccion(), paciente.getFechaDeNacimiento()));
+        });
+        return result;
+        
+    }
 
     @GET
     @Path("{from}/{to}")
@@ -119,6 +136,30 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
         return result;
         
     }
+    
+    @GET
+    @Path("{id}/consultas")
+    @Produces( MediaType.APPLICATION_JSON)
+    public List<ConsultaDTO> listConsultasByPaciente(@PathParam("id") Long id) {
+        TypedQuery<Consulta> query = this.em.createQuery(
+        "SELECT c FROM Consulta c WHERE c.paciente.id = :pacienteId", Consulta.class);
+        query.setParameter("pacienteId", id);
+
+        List<Consulta> consultasArr = query.getResultList();
+        List<ConsultaDTO> result = new ArrayList<>();
+
+        for (Consulta consulta : consultasArr) {
+            Paciente paciente = consulta.getPaciente();
+            PacienteDTO pacienteDto = new PacienteDTO(paciente.getId(), paciente.getNombre(),
+                    paciente.getApellido(), paciente.getTelefono(), paciente.getDireccion(),
+                    paciente.getFechaDeNacimiento());
+            result.add(new ConsultaDTO(consulta.getId(), consulta.getDescripcion(),
+                    consulta.getPago(), pacienteDto));
+        }
+        return result;
+        
+    }
+
 
     @GET
     @Path("count")
