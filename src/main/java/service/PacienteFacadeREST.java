@@ -9,7 +9,7 @@ import ENTITIES.Usuario;
 import dtos.PacienteCreateDTO;
 import dtos.PacienteDTO;
 import dtos.ResponseMessage;
-import java.net.http.HttpRequest;
+//import java.net.http.HttpRequest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,7 +67,7 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
         super.create(newPaciente);
         
         Long id = this.lastId();
-        PacienteDTO result = new PacienteDTO(id,newPaciente.getNombre(),newPaciente.getApellido(),newPaciente.getTelefono(),newPaciente.getDireccion(),newPaciente.getFechaDeNacimiento());
+        PacienteDTO result = new PacienteDTO(id,newPaciente.getNombre(),newPaciente.getApellido(),newPaciente.getTelefono(), newPaciente.getUsuario().getEmail(),newPaciente.getDireccion(),newPaciente.getFechaDeNacimiento());
         return Response.status(Response.Status.CREATED).entity(result).build();
     }
 
@@ -89,7 +89,7 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
     @Produces(MediaType.APPLICATION_JSON)
     public PacienteDTO getById(@PathParam("id") Long id) {
         Paciente paciente =  super.find(id);
-        PacienteDTO result = new PacienteDTO(paciente.getId(), paciente.getNombre(),paciente.getApellido(),paciente.getTelefono(), paciente.getDireccion(), paciente.getFechaDeNacimiento());
+        PacienteDTO result = new PacienteDTO(paciente.getId(), paciente.getNombre(),paciente.getApellido(),paciente.getTelefono(), paciente.getUsuario().getEmail(), paciente.getDireccion(), paciente.getFechaDeNacimiento());
         return result;
     }
 
@@ -100,7 +100,7 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
         List<PacienteDTO> result =  new ArrayList<PacienteDTO>();
         
         pacientes.forEach(paciente ->{
-            result.add(new PacienteDTO(paciente.getId(), paciente.getNombre(),paciente.getApellido(),paciente.getTelefono(), paciente.getDireccion(), paciente.getFechaDeNacimiento()));
+            result.add(new PacienteDTO(paciente.getId(), paciente.getNombre(),paciente.getApellido(),paciente.getTelefono(), paciente.getUsuario().getEmail(), paciente.getDireccion(), paciente.getFechaDeNacimiento()));
         });
         return result;
         
@@ -114,7 +114,7 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
         List<PacienteDTO> result =  new ArrayList<PacienteDTO>();
         
         pacientes.forEach(paciente ->{
-            result.add(new PacienteDTO(paciente.getId(), paciente.getNombre(),paciente.getApellido(),paciente.getTelefono(), paciente.getDireccion(), paciente.getFechaDeNacimiento()));
+            result.add(new PacienteDTO(paciente.getId(), paciente.getNombre(),paciente.getApellido(),paciente.getTelefono(), paciente.getUsuario().getEmail(), paciente.getDireccion(), paciente.getFechaDeNacimiento()));
         });
         return result;
         
