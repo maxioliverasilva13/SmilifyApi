@@ -24,7 +24,7 @@ import javax.persistence.ManyToOne;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "TYPE")
-public class Arancel {
+public class Arancel implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -59,7 +59,7 @@ public class Arancel {
      }
     
     public CategoriaArancel getCategoria(){
-        return this.categoria;
+        return null;
     }
 
     @Override
