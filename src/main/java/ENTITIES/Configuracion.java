@@ -44,7 +44,7 @@ public class Configuracion implements Serializable {
     }
     
     public Usuario getUsuario(){
-        return this.usuario;
+        return null;
     }
     
     public double getPrecioPorOrden(){
