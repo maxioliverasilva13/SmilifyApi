@@ -21,7 +21,7 @@ import javax.ws.rs.core.MediaType;
 
 /**
  *
- * @author rodrigo
+ * @author mandi
  */
 @Stateless
 @Path("entities.configuracion")

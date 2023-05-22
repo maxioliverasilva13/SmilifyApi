@@ -33,7 +33,7 @@ public class Reserva implements Serializable {
      
     @Column
     @Basic
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     
     @Column
@@ -45,8 +45,8 @@ public class Reserva implements Serializable {
     
     
   
-    @OneToOne(mappedBy="reserva")
-    Consulta consulta;
+//    @OneToOne(mappedBy="reserva")
+//    Consulta consulta;
      
     
     
@@ -66,9 +66,9 @@ public class Reserva implements Serializable {
     public Paciente getPaciente(){
         return this.paciente;
     }
-     public Consulta getConsulta(){
-        return this.consulta;
-    }
+//     public Consulta getConsulta(){
+//        return this.consulta;
+//    }
     
     
     
@@ -89,9 +89,9 @@ public class Reserva implements Serializable {
         this.paciente = paciente;
     }
      
-    public void setConsulta(Consulta consulta){
-        this.consulta = consulta;
-    }
+//    public void setConsulta(Consulta consulta){
+//        this.consulta = consulta;
+//    }
     
     
     
