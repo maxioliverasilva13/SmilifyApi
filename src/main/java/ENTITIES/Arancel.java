@@ -59,7 +59,7 @@ public class Arancel implements Serializable {
      }
     
     public CategoriaArancel getCategoria(){
-        return null;
+        return this.categoria;
     }
 
     @Override

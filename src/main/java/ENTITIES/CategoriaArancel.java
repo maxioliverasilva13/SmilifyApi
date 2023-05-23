@@ -5,6 +5,7 @@
 package ENTITIES;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -33,8 +34,8 @@ public class CategoriaArancel implements Serializable {
     @Basic
     private String nombre;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria", fetch = FetchType.LAZY,orphanRemoval=true)
-    private List<Arancel> aranceles;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria", fetch = FetchType.EAGER,orphanRemoval=true)
+    private List<Arancel> aranceles = new ArrayList<Arancel>(); 
     
     
     public Long getId() {
@@ -50,7 +51,7 @@ public class CategoriaArancel implements Serializable {
     }
     
     public List<Arancel> getAranceles(){
-        return this.aranceles;
+        return new ArrayList<Arancel>();
     }
     
     public void setNombre(String nombre){

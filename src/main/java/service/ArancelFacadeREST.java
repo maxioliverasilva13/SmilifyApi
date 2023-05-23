@@ -57,7 +57,7 @@ public class ArancelFacadeREST extends AbstractFacade<Arancel> {
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id));
+        super.remove(super.find(id)); 
     }
 
     @GET
@@ -68,10 +68,13 @@ public class ArancelFacadeREST extends AbstractFacade<Arancel> {
     }
 
     @GET
-    @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Arancel> findAll() {
-        return super.findAll();
+    @Consumes( MediaType.APPLICATION_JSON)
+    @Produces( MediaType.APPLICATION_JSON)
+    public Response listar() {
+        List<Arancel> aranceles = super.findAll();
+         
+        return Response.status(Response.Status.CREATED).entity(aranceles).build();
+
     }
 
     @GET
