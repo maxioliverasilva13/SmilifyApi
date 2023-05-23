@@ -65,10 +65,10 @@ public class CategoriaArancelFacadeREST extends AbstractFacade<CategoriaArancel>
     }
 
     @GET
-    @Override
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<CategoriaArancel> findAll() {
-        return super.findAll();
+    @Produces({ MediaType.APPLICATION_JSON})
+    public Response listar() {
+        List<CategoriaArancel> categoria =  super.findAll();
+        return Response.status(200).entity(categoria).build();
     }
 
     @GET
