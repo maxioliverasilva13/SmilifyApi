@@ -101,7 +101,6 @@ public class Usuario implements Serializable {
         return this.password;
     }
     
-    @XmlTransient
     public List<Paciente> getPacientes(){
         return this.pacientes;
     }
