@@ -55,17 +55,17 @@ public class Paciente implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fechaDeNacimiento;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.LAZY,orphanRemoval=true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente")
     private List<Archivo> archivos = new ArrayList<>();
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.LAZY,orphanRemoval=true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente")
     private List<Reserva> reservas = new ArrayList<>();
     
  
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.LAZY,orphanRemoval=true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente")
     private List<Consulta> consultas = new ArrayList<>();
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.LAZY,orphanRemoval=true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente")
     private List<Tratamiento> tratamientos = new ArrayList<>(); 
     
      

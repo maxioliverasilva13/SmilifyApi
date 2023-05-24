@@ -34,7 +34,7 @@ public class Archivo implements Serializable {
     @Basic
     String url;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Paciente paciente;
     
     
