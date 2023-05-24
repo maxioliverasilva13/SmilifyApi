@@ -6,8 +6,10 @@ package ENTITIES;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -52,26 +54,38 @@ public class Paciente implements Serializable {
     
     @Column 
     @Basic
+    private String correo;
+    
+    @Column 
+    @Basic
     @Temporal(TemporalType.DATE)
     private Date fechaDeNacimiento;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente")
-    private List<Archivo> archivos = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.EAGER)
+    private Set<Archivo> archivos = Collections.emptySet();
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente")
-    private List<Reserva> reservas = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.EAGER)
+    private Set<Reserva> reservas = Collections.emptySet();
     
  
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente")
-    private List<Consulta> consultas = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.EAGER)
+    private Set<Consulta> consultas = Collections.emptySet();
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente")
-    private List<Tratamiento> tratamientos = new ArrayList<>(); 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.EAGER)
+    private Set<Tratamiento> tratamientos = Collections.emptySet(); 
     
      
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Usuario usuario;
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorre(String correo) {
+        this.correo = correo;
+    }
     
     public Long getId() {
         return id;
@@ -103,20 +117,20 @@ public class Paciente implements Serializable {
         return this.usuario;
     }
    
-    public List<Archivo> getArchivo(){
+    public Set<Archivo> getArchivo(){
         return this.archivos;
     }
     
     
-    public List<Reserva> getReservas(){
+    public Set<Reserva> getReservas(){
         return this.reservas;
     }
     
-    public List<Consulta> getConsultas(){
+    public Set<Consulta> getConsultas(){
         return this.consultas;
     }
     
-    public List<Tratamiento> getTratamientos(){
+    public Set<Tratamiento> getTratamientos(){
         return this.tratamientos;
     }
    
@@ -140,19 +154,19 @@ public class Paciente implements Serializable {
         this.usuario = usuario;
     }
     
-    public void setArchivos(List<Archivo> archivos){
+    public void setArchivos(Set<Archivo> archivos){
         this.archivos = archivos;
     }
     
-    public void setReservas(List<Reserva> reservas){
+    public void setReservas(Set<Reserva> reservas){
         this.reservas = reservas;
     }
     
-    public void setConsultas(List<Consulta> consultas){
+    public void setConsultas(Set<Consulta> consultas){
         this.consultas = consultas;
     }
     
-    public void setTratamientos(List<Tratamiento> tratamientos){
+    public void setTratamientos(Set<Tratamiento> tratamientos){
         this.tratamientos = tratamientos;
     }
 
