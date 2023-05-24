@@ -21,15 +21,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author rodrigo
  */
 @Entity
-@XmlRootElement
 public class Paciente implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -111,17 +108,14 @@ public class Paciente implements Serializable {
     }
     
     
-    @XmlTransient
     public List<Reserva> getReservas(){
         return this.reservas;
     }
     
-    @XmlTransient
     public List<Consulta> getConsultas(){
         return this.consultas;
     }
     
-    @XmlTransient
     public List<Tratamiento> getTratamientos(){
         return this.tratamientos;
     }
