@@ -9,12 +9,12 @@ package dtos;
  * @author mandi
  */
 public class ArchivoViewDTO {
-    public Long id;
+    public int id;
     public String tipo;
     public String url;
     public Long paciente_id;
 
-    public ArchivoViewDTO(Long id, String tipo, String url, Long paciente_id) {
+    public ArchivoViewDTO(int id, String tipo, String url, Long paciente_id) {
         this.id = id;
         this.tipo = tipo;
         this.url = url;
