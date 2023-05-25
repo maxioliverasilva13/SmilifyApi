@@ -40,7 +40,7 @@ public class Reserva implements Serializable {
     @Basic
     String estado;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Paciente paciente;
     
     

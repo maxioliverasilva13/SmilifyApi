@@ -36,7 +36,7 @@ public class Consulta implements Serializable {
     @Basic
     private boolean pago;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Paciente paciente; 
     
 
@@ -44,7 +44,7 @@ public class Consulta implements Serializable {
     private Reserva reserva;
     
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Tratamiento tratamiento;
     
     

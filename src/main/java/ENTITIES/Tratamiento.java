@@ -34,10 +34,10 @@ public class Tratamiento implements Serializable {
     @Basic
     private String descripcion;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Paciente paciente;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tratamiento", fetch = FetchType.LAZY,orphanRemoval=true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tratamiento", fetch = FetchType.EAGER,orphanRemoval=true)
     private List<Consulta> consultas;
     
 
