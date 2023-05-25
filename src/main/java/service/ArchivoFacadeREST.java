@@ -11,6 +11,7 @@ import dtos.ArchivoDTO;
 import dtos.ArchivoViewDTO;
 import dtos.PacienteDTO;
 import dtos.ResponseMessage;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -62,7 +63,7 @@ public class ArchivoFacadeREST extends AbstractFacade<Archivo> {
             createArchivo.setPaciente(paciente);
             super.create(createArchivo);
 
-            Long id = this.lastId();
+            int id = this.lastId();
 
             //PacienteDTO pacienteDto = new PacienteDTO(paciente.getId(), paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getUsuario().getEmail(), paciente.getDireccion(), paciente.getFechaDeNacimiento());
             ArchivoViewDTO archivoDto = new ArchivoViewDTO(id, archivo.tipo, archivo.url, archivo.paciente_id);
@@ -113,7 +114,7 @@ public class ArchivoFacadeREST extends AbstractFacade<Archivo> {
             archivos.forEach(archivo ->{
                 //Paciente paciente = em.find(Paciente.class, id);
                 //PacienteDTO pacienteDto = new PacienteDTO(paciente.getId(),paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getUsuario().getEmail(), paciente.getDireccion(), paciente.getFechaDeNacimiento());
-                result.add(new ArchivoViewDTO(archivo.getId(), archivo.getTipo(), archivo.getUrl(), id));
+                result.add(new ArchivoViewDTO(Integer.parseInt(archivo.getId().toString()), archivo.getTipo(), archivo.getUrl(), id));
             });
             return Response.status(Response.Status.ACCEPTED).entity(result).build();
         } catch (Exception e) {
@@ -136,12 +137,13 @@ public class ArchivoFacadeREST extends AbstractFacade<Archivo> {
         return String.valueOf(super.count());
     }
 
-    private Long lastId() {
+    private int lastId() {
         try {
-            Long last = (Long) getEntityManager().createNativeQuery("SELECT id FROM reserva ORDER BY id DESC LIMIT 1").getSingleResult();
+            int last = ((BigInteger) getEntityManager().createNativeQuery("SELECT id FROM archivo ORDER BY id DESC LIMIT 1").getSingleResult()).intValue();
             return last;
         } catch (Exception e) {
-            return null;
+            System.err.println("Error en ArchivoFacade, contenido: " + e.getMessage());
+            return -1;
         }
 
     }
