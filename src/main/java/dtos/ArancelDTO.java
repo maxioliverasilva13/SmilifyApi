@@ -13,12 +13,14 @@ public class ArancelDTO {
         public String nombre;
         public String type;
         public String nombreCategoria;
+        public Double precio;
         
-       public ArancelDTO(Long id, String nombre, String type, String nombreCategoria){
+       public ArancelDTO(Long id, String nombre, String type, String nombreCategoria, Double precio){
            this.id = id;
            this.nombre = nombre;
            this.type = type;
            this.nombreCategoria  = nombreCategoria;
+           this.precio = precio;
        }
         
 }

@@ -15,15 +15,17 @@ public class PacienteDTO {
     public String nombre;
     public String apellido;
     public String telefono;
+    public String correo;
     public String direccion;
     public Date fechaDeNacimiento;
     
     
-    public PacienteDTO(Long id, String nombre, String apellido, String telefono,String direccion,Date fechaDeNacimiento){
+    public PacienteDTO(Long id, String nombre, String apellido, String telefono, String correo, String direccion,Date fechaDeNacimiento){
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
+        this.correo = correo;
         this.direccion = direccion;
         this.fechaDeNacimiento = fechaDeNacimiento;
     }

@@ -5,8 +5,13 @@
 package service;
 
 import ENTITIES.Configuracion;
+import ENTITIES.Usuario;
+import dtos.ResponseMessage;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.Stateless;
+import javax.json.JsonObject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
@@ -18,10 +23,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import service.UsuarioFacadeREST;
+import util.JWT;
+import dtos.ConfiguracionDto;
+
 
 /**
  *
- * @author rodrigo
+ * @author mandi
  */
 @Stateless
 @Path("entities.configuracion")
@@ -43,9 +53,18 @@ public class ConfiguracionFacadeREST extends AbstractFacade<Configuracion> {
 
     @PUT
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Long id, Configuracion entity) {
-        super.edit(entity);
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response edit(@PathParam("id") Long id, ConfiguracionDto entity) {
+        Configuracion conf = super.find(id);
+        if (conf == null) {
+            ResponseMessage res = new ResponseMessage(404, "No existe una configuracion con ese id");
+            
+            return Response.status(404).entity(res).build(); 
+        }
+        conf.setPrecioPorOrden(entity.getPrecioPorOrden());
+        super.edit(conf);
+        return Response.status(201).entity(conf).build(); 
     }
 
     @DELETE
@@ -56,9 +75,12 @@ public class ConfiguracionFacadeREST extends AbstractFacade<Configuracion> {
 
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Configuracion find(@PathParam("id") Long id) {
-        return super.find(id);
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response find(@PathParam("id") Long id) {
+        
+        Configuracion conf = super.find(id);
+        
+        return Response.status(200).entity(conf).build();
     }
 
     @GET

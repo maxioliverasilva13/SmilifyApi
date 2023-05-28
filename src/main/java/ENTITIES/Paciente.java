@@ -56,17 +56,17 @@ public class Paciente implements Serializable {
     private Date fechaDeNacimiento;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.LAZY,orphanRemoval=true)
-    private List<Archivo> archivos;
+    private List<Archivo> archivos = new ArrayList<>();
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.LAZY,orphanRemoval=true)
-    private List<Reserva> reservas;
+    private List<Reserva> reservas = new ArrayList<>();
     
  
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.LAZY,orphanRemoval=true)
-    private List<Consulta> consultas;
+    private List<Consulta> consultas = new ArrayList<>();
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.LAZY,orphanRemoval=true)
-    private List<Consulta> tratamientos; 
+    private List<Tratamiento> tratamientos = new ArrayList<>(); 
     
      
 
@@ -108,6 +108,7 @@ public class Paciente implements Serializable {
     }
     
     
+    
     public List<Reserva> getReservas(){
         return this.reservas;
     }
@@ -116,6 +117,9 @@ public class Paciente implements Serializable {
         return this.consultas;
     }
     
+    public List<Tratamiento> getTratamientos(){
+        return this.tratamientos;
+    }
    
     public void setNombre(String nombre){
         this.nombre = nombre;
@@ -149,7 +153,9 @@ public class Paciente implements Serializable {
         this.consultas = consultas;
     }
     
-    
+    public void setTratamientos(List<Tratamiento> tratamientos){
+        this.tratamientos = tratamientos;
+    }
 
     
        

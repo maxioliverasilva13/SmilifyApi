@@ -35,7 +35,7 @@ public class Arancel implements Serializable {
     @Basic
     String nombre;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private CategoriaArancel categoria;
 
     public Long getId() {

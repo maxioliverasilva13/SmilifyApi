@@ -32,10 +32,11 @@ public class CategoriaArancel implements Serializable {
     
     @Column
     @Basic
-    private String nombre;
+    private String nombreCategoria;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria", fetch = FetchType.EAGER,orphanRemoval=true)
     private List<Arancel> aranceles = new ArrayList<Arancel>(); 
+
     
     
     public Long getId() {
@@ -47,7 +48,7 @@ public class CategoriaArancel implements Serializable {
     }
     
     public String getNombre(){
-        return this.nombre;
+        return this.nombreCategoria;
     }
     
     public List<Arancel> getAranceles(){
@@ -55,7 +56,7 @@ public class CategoriaArancel implements Serializable {
     }
     
     public void setNombre(String nombre){
-        this.nombre = nombre;
+        this.nombreCategoria = nombre;
     }
     
     public void setAranceles(List<Arancel> aranceles){

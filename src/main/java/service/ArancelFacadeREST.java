@@ -8,8 +8,11 @@ import ENTITIES.Arancel;
 import ENTITIES.ArancelColectivo;
 import ENTITIES.ArancelPrivado;
 import ENTITIES.CategoriaArancel;
+import ENTITIES.Configuracion;
+import dtos.ArancelDTO;
 import dtos.CreateArancelDTO;
 import dtos.ResponseMessage;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -71,11 +74,31 @@ public class ArancelFacadeREST extends AbstractFacade<Arancel> {
     @Consumes( MediaType.APPLICATION_JSON)
     @Produces( MediaType.APPLICATION_JSON)
     public Response listar() {
+        //List<Arancel> aranceles = super.findAll();
         List<Arancel> aranceles = super.findAll();
-         
-        return Response.status(Response.Status.CREATED).entity(aranceles).build();
+        List<ArancelDTO> result  =  new ArrayList();
 
-    }
+        aranceles.forEach(arancel ->{
+            double precio;
+            String type;
+            if(arancel instanceof ArancelPrivado){
+              ArancelPrivado arancelPrivado =  (ArancelPrivado)arancel;
+              precio = arancelPrivado.getPrecio();
+              type = "ArancelPrivado";
+            }else{  // is a arancel colectivo
+                ArancelColectivo arancelColectivo =  (ArancelColectivo)arancel;
+                Configuracion conf =  (Configuracion) this.getEntityManager().createNativeQuery("SELECT * FROM configuracion", Configuracion.class).getSingleResult(); // Primero se guarda la configuracion
+                precio =  (conf.getPrecioPorOrden() * arancelColectivo.getCantOrdenes());
+                type = "ArancelColectivo";
+            }
+           //public ArancelDTO(Long id, String nombre, String type, String nombreCategoria, Double precio){
+           
+            result.add(new ArancelDTO(arancel.getId(), arancel.getNombre(), type , arancel.getCategoria().getNombre(), precio));
+            
+        });
+        return Response.status(Response.Status.ACCEPTED).entity(result).build(); 
+
+    }  
 
     @GET
     @Path("{from}/{to}")
@@ -88,7 +111,7 @@ public class ArancelFacadeREST extends AbstractFacade<Arancel> {
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
-        return String.valueOf(super.count());
+        return String.valueOf(super.count()); 
     }
 
     @POST
