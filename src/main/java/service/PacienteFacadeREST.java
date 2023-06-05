@@ -6,8 +6,10 @@ package service;
 
 import ENTITIES.Paciente;
 import ENTITIES.Usuario;
+import dtos.CambiarEstadoDTO;
 import dtos.PacienteCreateDTO;
 import dtos.PacienteDTO;
+import dtos.PacienteInfoDTO;
 import dtos.ResponseMessage;
 import java.net.http.HttpRequest;
 import java.text.SimpleDateFormat;
@@ -47,6 +49,7 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
 
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
     public Response crear(PacienteCreateDTO pacienteData, @Context HttpServletRequest request) {
 
         Usuario user = (Usuario) request.getAttribute("userData");
@@ -56,6 +59,8 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
         newPaciente.setApellido(pacienteData.apellido);
         newPaciente.setTelefono(pacienteData.telefono);
         newPaciente.setDireccion(pacienteData.direccion);
+        newPaciente.setCorre(pacienteData.correo);
+
         newPaciente.setUsuario(user);
         try {
             Date fechaNac = new SimpleDateFormat("dd/MM/yyyy").parse(pacienteData.fechaDeNacimiento);
@@ -76,6 +81,52 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void edit(@PathParam("id") Long id, Paciente entity) {
         super.edit(entity);
+    }
+    
+    @POST
+    @Path("/cambiarEstado")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response cambiarEstado(CambiarEstadoDTO estado) {
+        try {
+            Paciente paciente = this.em.find(Paciente.class, estado.pacienteId);
+            if (paciente == null) {
+                throw new Exception("Error, el paciente no existe");
+            }
+            paciente.setTieneAlta(estado.alta);
+            Date fechaAlta = new SimpleDateFormat("dd/MM/yyyy").parse(estado.fechaAlta);
+            paciente.setFechaDeAlta(fechaAlta);
+            em.merge(paciente);
+            return Response.status(Response.Status.ACCEPTED).entity(paciente).build();
+        } catch (Exception e) {
+            ResponseMessage res = new ResponseMessage(500, e.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(res).build();
+        }
+    }
+
+    @GET
+    @Path("/getPacienteInfo/{id}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response findPacienteById(@PathParam("id") Long id) {
+        try {
+            Paciente paciente = this.em.find(Paciente.class, id);
+            if (paciente == null) {
+                throw new Exception("Error, el paciente no existe");
+            }
+            
+            PacienteInfoDTO pacienteInfo = new PacienteInfoDTO();
+            pacienteInfo.setPacienteInfo(paciente);
+            pacienteInfo.setReservas(paciente.getReservas());
+            pacienteInfo.setTratamientos(paciente.getTratamientos());
+            pacienteInfo.setArchivos(paciente.getArchivo());
+            pacienteInfo.setConsultas(paciente.getConsultas());
+
+            return Response.status(Response.Status.ACCEPTED).entity(pacienteInfo).build();
+        } catch (Exception e) {
+            ResponseMessage res = new ResponseMessage(500, e.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(res).build();
+        }
     }
 
     @DELETE

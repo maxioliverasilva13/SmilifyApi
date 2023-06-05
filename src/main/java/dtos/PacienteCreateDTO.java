@@ -15,6 +15,6 @@ public class PacienteCreateDTO {
     public String direccion;
     public String telefono;
     public String fechaDeNacimiento;
-
-
+    public String correo;
+    public Boolean activo;
 }

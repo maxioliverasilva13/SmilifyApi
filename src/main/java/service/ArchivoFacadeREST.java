@@ -58,6 +58,7 @@ public class ArchivoFacadeREST extends AbstractFacade<Archivo> {
         Archivo createArchivo = new Archivo();
         createArchivo.setTipo(archivo.tipo);
         createArchivo.setUrl(archivo.url);
+        createArchivo.setFileName(archivo.fileName);
         try {
             Paciente paciente = this.em.find(Paciente.class, archivo.paciente_id);
             createArchivo.setPaciente(paciente);

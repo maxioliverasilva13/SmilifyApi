@@ -66,7 +66,7 @@ public class Consulta implements Serializable {
     }
     
     public Paciente getPaciente(){
-        return this.paciente;
+        return null;
     }
     
     public Reserva getReserva(){
