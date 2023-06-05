@@ -16,6 +16,9 @@ public class ReservaDTO {
     public Date fecha;
     public PacienteDTO paciente;
     
+    public ReservaDTO(){
+    }
+    
     public ReservaDTO(Long id, String estado, Date fecha ,PacienteDTO paciente ){
         this.id = id;
         this.estado = estado;

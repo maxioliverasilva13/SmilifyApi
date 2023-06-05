@@ -18,9 +18,10 @@ public class PacienteDTO {
     public String correo;
     public String direccion;
     public Date fechaDeNacimiento;
+    public boolean activo;
     
     
-    public PacienteDTO(Long id, String nombre, String apellido, String telefono, String correo, String direccion,Date fechaDeNacimiento){
+    public PacienteDTO(Long id, String nombre, String apellido, String telefono, String correo, String direccion,Date fechaDeNacimiento, boolean activo){
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -28,5 +29,6 @@ public class PacienteDTO {
         this.correo = correo;
         this.direccion = direccion;
         this.fechaDeNacimiento = fechaDeNacimiento;
+        this.activo = activo;
     }
 }

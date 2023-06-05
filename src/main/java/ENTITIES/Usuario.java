@@ -4,6 +4,7 @@
  */
 package ENTITIES;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class Usuario implements Serializable {
     @Column
     @Basic
     @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date fechaDeNacimiento;
     
     @Column(length=9)

@@ -46,16 +46,20 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
     }
 
     @POST
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
     public Response crear(PacienteCreateDTO pacienteData, @Context HttpServletRequest request) {
 
         Usuario user = (Usuario) request.getAttribute("userData");
 
         Paciente newPaciente = new Paciente();
+        newPaciente.setId(pacienteData.id);
         newPaciente.setNombre(pacienteData.nombre);
         newPaciente.setApellido(pacienteData.apellido);
         newPaciente.setTelefono(pacienteData.telefono);
+        newPaciente.setCorreo(pacienteData.correo);
         newPaciente.setDireccion(pacienteData.direccion);
+        newPaciente.setActivo(pacienteData.activo);
         newPaciente.setUsuario(user);
         try {
             Date fechaNac = new SimpleDateFormat("dd/MM/yyyy").parse(pacienteData.fechaDeNacimiento);
@@ -64,11 +68,18 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
             ResponseMessage res = new ResponseMessage(400, "Formato de fecha incorrecto");
             return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
         }
-        super.create(newPaciente);
-
-        Long id = this.lastId();
-        PacienteDTO result = new PacienteDTO(id, newPaciente.getNombre(), newPaciente.getApellido(), newPaciente.getTelefono(), newPaciente.getCorreo(), newPaciente.getDireccion(), newPaciente.getFechaDeNacimiento());
-        return Response.status(Response.Status.CREATED).entity(result).build();
+        Paciente test = super.find(pacienteData.id);
+        if (test != null){
+            ResponseMessage res = new ResponseMessage(400, "Ya existe un usuario con esa cedula");
+            return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
+        } else {
+             super.create(newPaciente);
+        //Long id = this.lastId();
+        //PacienteDTO result = new PacienteDTO(newPaciente.getId(), newPaciente.getNombre(), newPaciente.getApellido(), newPaciente.getTelefono(), newPaciente.getCorreo(), newPaciente.getDireccion(), newPaciente.getFechaDeNacimiento(), newPaciente.getActivo());
+        ResponseMessage res = new ResponseMessage(200, "creado Correctamente");
+        return Response.status(200).entity(res).build();
+        }
+       
     }
 
     @PUT
@@ -89,8 +100,12 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
     @Produces(MediaType.APPLICATION_JSON)
     public PacienteDTO getById(@PathParam("id") Long id) {
         Paciente paciente = super.find(id);
-        PacienteDTO result = new PacienteDTO(paciente.getId(), paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getCorreo(), paciente.getDireccion(), paciente.getFechaDeNacimiento());
-        return result;
+        if(paciente != null) {
+            PacienteDTO result = new PacienteDTO(paciente.getId(), paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getCorreo(), paciente.getDireccion(), paciente.getFechaDeNacimiento(), paciente.getActivo());
+            return result;
+
+        }
+        return null;
     }
 
     @GET
@@ -100,7 +115,7 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
         List<PacienteDTO> result = new ArrayList<PacienteDTO>();
 
         pacientes.forEach(paciente -> {
-            result.add(new PacienteDTO(paciente.getId(), paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getCorreo(), paciente.getDireccion(), paciente.getFechaDeNacimiento()));
+            result.add(new PacienteDTO(paciente.getId(), paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getCorreo(), paciente.getDireccion(), paciente.getFechaDeNacimiento(), paciente.getActivo()));
         });
 
         return Response.status(201).entity(pacientes).build();
@@ -115,7 +130,7 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
         List<PacienteDTO> result = new ArrayList<PacienteDTO>();
 
         pacientes.forEach(paciente -> {
-            result.add(new PacienteDTO(paciente.getId(), paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getCorreo(), paciente.getDireccion(), paciente.getFechaDeNacimiento()));
+            result.add(new PacienteDTO(paciente.getId(), paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getCorreo(), paciente.getDireccion(), paciente.getFechaDeNacimiento(), paciente.getActivo()));
         });
         return result;
 
