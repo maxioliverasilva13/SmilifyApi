@@ -5,6 +5,7 @@
 package service;
 
 import ENTITIES.CategoriaArancel;
+import ENTITIES.Paciente;
 import ENTITIES.Usuario;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -52,6 +53,10 @@ public abstract class AbstractFacade<T> {
     
      public CategoriaArancel findArancel(Long id) {
         return getEntityManager().find(CategoriaArancel.class, id);
+    }
+     
+    public Paciente findPaciente(Long id) {
+        return getEntityManager().find(Paciente.class, id);
     }
 
     public List<T> findAll() {

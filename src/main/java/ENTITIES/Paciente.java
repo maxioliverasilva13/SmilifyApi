@@ -78,6 +78,9 @@ public class Paciente implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.EAGER)
     private Set<Tratamiento> tratamientos = Collections.emptySet(); 
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pacienteInfo", fetch = FetchType.EAGER)
+    private Set<DienteInfo> infoDientes = Collections.emptySet(); 
+    
      
 
     @ManyToOne(fetch = FetchType.EAGER)
