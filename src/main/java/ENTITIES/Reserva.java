@@ -64,13 +64,15 @@ public class Reserva implements Serializable {
     }
     
     public Paciente getPaciente(){
-        return this.paciente;
+        return null;
     }
 //     public Consulta getConsulta(){
 //        return this.consulta;
 //    }
     
-    
+    public Paciente obtenerPaciente(){
+        return this.paciente;
+    }
     
 
     public void setId(Long id) {
