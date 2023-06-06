@@ -129,7 +129,7 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
         
         reservas.forEach(reserva ->{
              Paciente pacienteData  = reserva.obtenerPaciente();
-             PacienteDTO pacienteDto = new PacienteDTO(pacienteData.getId(), pacienteData.getNombre(), pacienteData.getApellido(), pacienteData.getTelefono(),pacienteData.getUsuario().getEmail(), pacienteData.getDireccion(), pacienteData.getFechaDeNacimiento());
+             PacienteDTO pacienteDto = new PacienteDTO(pacienteData.getId(), pacienteData.getNombre(), pacienteData.getApellido(), pacienteData.getTelefono(),pacienteData.getUsuario().getEmail(), pacienteData.getDireccion(), pacienteData.getFechaDeNacimiento(), pacienteData.getActivo());
              ReservaDTO reservaDto = new ReservaDTO(reserva.getId(),reserva.getEstado(), reserva.getFecha(),pacienteDto);
              result.add(reservaDto);
         });
