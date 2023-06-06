@@ -119,6 +119,22 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
         return result;
 
     }
+    
+    @GET
+    @Path("listarHoy")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ReservaDTO> listarHoy() {
+        List<Reserva> reservas = this.em.createNativeQuery("SELECT * FROM `reserva` WHERE estado = 'aceptada' AND fecha >= CURRENT_DATE AND fecha < DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY)", Reserva.class).getResultList();
+        List<ReservaDTO> result =  new ArrayList<ReservaDTO>();
+        
+        reservas.forEach(reserva ->{
+             Paciente pacienteData  = reserva.obtenerPaciente();
+             PacienteDTO pacienteDto = new PacienteDTO(pacienteData.getId(), pacienteData.getNombre(), pacienteData.getApellido(), pacienteData.getTelefono(),pacienteData.getUsuario().getEmail(), pacienteData.getDireccion(), pacienteData.getFechaDeNacimiento());
+             ReservaDTO reservaDto = new ReservaDTO(reserva.getId(),reserva.getEstado(), reserva.getFecha(),pacienteDto);
+             result.add(reservaDto);
+        });
+        return result;
+    }
 
     @GET
     @Path("{from}/{to}")

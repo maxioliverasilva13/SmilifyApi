@@ -70,7 +70,9 @@ public class Reserva implements Serializable {
 //        return this.consulta;
 //    }
     
-    
+    public Paciente obtenerPaciente(){
+        return this.paciente;
+    }
     
 
     public void setId(Long id) {
