@@ -10,11 +10,12 @@ package dtos;
  */
 public class PacienteCreateDTO {
    
+    public Long id;
     public String nombre;
     public String apellido;
     public String direccion;
     public String telefono;
+    public String correo;
     public String fechaDeNacimiento;
-
-
+    public boolean activo;
 }

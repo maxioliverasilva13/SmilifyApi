@@ -64,7 +64,7 @@ public class Reserva implements Serializable {
     }
     
     public Paciente getPaciente(){
-        return this.paciente;
+        return null;
     }
 //     public Consulta getConsulta(){
 //        return this.consulta;

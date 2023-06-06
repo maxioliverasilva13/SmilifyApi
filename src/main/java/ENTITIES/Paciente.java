@@ -33,7 +33,6 @@ public class Paciente implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
     @Column 
@@ -60,9 +59,14 @@ public class Paciente implements Serializable {
     @Basic
     @Temporal(TemporalType.DATE)
     private Date fechaDeNacimiento;
+
+    @Column 
+    @Basic
+    private Boolean activo;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.EAGER)
     private Set<Archivo> archivos = Collections.emptySet();
+
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente", fetch = FetchType.EAGER)
     private Set<Reserva> reservas = Collections.emptySet();
@@ -86,7 +90,7 @@ public class Paciente implements Serializable {
         return correo;
     }
 
-    public void setCorre(String correo) {
+    public void setCorreo(String correo) {
         this.correo = correo;
     }
     
@@ -114,6 +118,10 @@ public class Paciente implements Serializable {
     
      public Date getFechaDeNacimiento(){
         return this.fechaDeNacimiento;
+    }
+     
+     public boolean getActivo(){
+        return this.activo;
     }
     
     public Usuario getUsuario(){
@@ -153,6 +161,10 @@ public class Paciente implements Serializable {
         this.fechaDeNacimiento = fechaDeNacimiento;
     }
     
+    public void setActivo(boolean activo){
+        this.activo = activo;
+    }
+    
     public void setUsuario(Usuario usuario){
         this.usuario = usuario;
     }
@@ -172,9 +184,6 @@ public class Paciente implements Serializable {
     public void setTratamientos(Set<Tratamiento> tratamientos){
         this.tratamientos = tratamientos;
     }
-
-    
-       
 
 
     @Override
