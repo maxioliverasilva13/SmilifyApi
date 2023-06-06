@@ -34,6 +34,11 @@ public class Archivo implements Serializable {
     @Basic
     String url;
     
+    @Column
+    @Basic
+    String fileName;
+    
+    
     @ManyToOne(fetch = FetchType.EAGER)
     private Paciente paciente;
     
@@ -49,9 +54,19 @@ public class Archivo implements Serializable {
     public String getUrl(){
         return this.url;
     }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+    
+    
     
     public Paciente getPaciente(){
-        return this.paciente;
+        return null;
     }
    
     public void setId(Long id) {

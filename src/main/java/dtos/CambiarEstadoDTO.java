@@ -6,11 +6,10 @@ package dtos;
 
 /**
  *
- * @author mandi
+ * @author maximilianoolivera
  */
-public class ArchivoCreateDTO {
-    public String tipo;
-    public String url;
-    public Long paciente_id;
-    public String fileName;
+public class CambiarEstadoDTO {
+    public Long pacienteId;
+    public boolean alta;
+    public String fechaAlta; 
 }

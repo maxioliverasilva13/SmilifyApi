@@ -6,6 +6,7 @@ package ENTITIES;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.enterprise.inject.Default;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -40,6 +41,9 @@ public class Tratamiento implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tratamiento", fetch = FetchType.EAGER,orphanRemoval=true)
     private List<Consulta> consultas;
     
+    @Column
+    @Basic
+    private String status = "activo";   
 
     public Long getId() {
         return id;
@@ -48,6 +52,20 @@ public class Tratamiento implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+    
+    
 
     @Override
     public int hashCode() {
@@ -68,6 +86,24 @@ public class Tratamiento implements Serializable {
         }
         return true;
     }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
+    }
+
+    public void setConsultas(List<Consulta> consultas) {
+        this.consultas = consultas;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    
+    
 
     @Override
     public String toString() {
