@@ -44,6 +44,18 @@ public class AuthInterceptor implements ContainerRequestFilter {
             if (url.contains("/resources/authentication") && !url.contains("/current_user")) {
                 return;
             }
+            if (url.contains("/resources/entities.paciente")) {
+                return;
+            }
+            if (url.contains("/resources/entities.reserva/validate")) {
+                return;
+            }
+            if (url.contains("/resources/entities.reserva/obtenerFechasByFechas")) {
+                return;
+            }
+             if (url.contains("/resources/entities.reserva")) {
+                return;
+            }
             String token = request.getHeaderString("Authorization");
             if (token == null || token.equals("")) {
                 ResponseMessage res = new ResponseMessage(401, "Unauthorized");
