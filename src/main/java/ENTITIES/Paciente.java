@@ -134,6 +134,10 @@ public class Paciente implements Serializable {
     public Usuario getUsuario(){
         return this.usuario;
     }
+    
+    public Usuario getUsuarioInfoData(){
+        return this.usuario;
+    }
 
     public Set<Archivo> getArchivo() {
         return this.archivos;

@@ -50,38 +50,39 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces(MediaType.APPLICATION_JSON)
-    public Response crear(PacienteCreateDTO pacienteData, @Context HttpServletRequest request) {
+    public Response crear(PacienteCreateDTO pacienteData) {
 
-        Usuario user = (Usuario) request.getAttribute("userData");
-
-        Paciente newPaciente = new Paciente();
-        newPaciente.setId(pacienteData.id);
-        newPaciente.setNombre(pacienteData.nombre);
-        newPaciente.setApellido(pacienteData.apellido);
-        newPaciente.setTelefono(pacienteData.telefono);
-        newPaciente.setCorreo(pacienteData.correo);
-        newPaciente.setDireccion(pacienteData.direccion);
-        newPaciente.setActivo(pacienteData.activo);
-        newPaciente.setUsuario(user);
+//        Usuario user = (Usuario) request.getAttribute("userData");
         try {
+
+            Paciente newPaciente = new Paciente();
+            newPaciente.setId(pacienteData.id);
+            newPaciente.setNombre(pacienteData.nombre);
+            newPaciente.setApellido(pacienteData.apellido);
+            newPaciente.setTelefono(pacienteData.telefono);
+            newPaciente.setCorreo(pacienteData.correo);
+            newPaciente.setDireccion(pacienteData.direccion);
+            newPaciente.setActivo(pacienteData.activo);
+//        newPaciente.setUsuario(user);
             Date fechaNac = new SimpleDateFormat("dd/MM/yyyy").parse(pacienteData.fechaDeNacimiento);
             newPaciente.setFechaDeNacimiento(fechaNac);
+
+            Paciente test = super.find(pacienteData.id);
+            if (test != null) {
+                ResponseMessage res = new ResponseMessage(400, "Ya existe un usuario con esa cedula");
+                return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
+            } else {
+                super.create(newPaciente);
+                //Long id = this.lastId();
+                //PacienteDTO result = new PacienteDTO(newPaciente.getId(), newPaciente.getNombre(), newPaciente.getApellido(), newPaciente.getTelefono(), newPaciente.getCorreo(), newPaciente.getDireccion(), newPaciente.getFechaDeNacimiento(), newPaciente.getActivo());
+                ResponseMessage res = new ResponseMessage(200, "creado Correctamente");
+                return Response.status(200).entity(res).build();
+            }
         } catch (Exception e) {
-            ResponseMessage res = new ResponseMessage(400, "Formato de fecha incorrecto");
+            ResponseMessage res = new ResponseMessage(400, e.getMessage());
             return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
         }
-        Paciente test = super.find(pacienteData.id);
-        if (test != null){
-            ResponseMessage res = new ResponseMessage(400, "Ya existe un usuario con esa cedula");
-            return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
-        } else {
-             super.create(newPaciente);
-        //Long id = this.lastId();
-        //PacienteDTO result = new PacienteDTO(newPaciente.getId(), newPaciente.getNombre(), newPaciente.getApellido(), newPaciente.getTelefono(), newPaciente.getCorreo(), newPaciente.getDireccion(), newPaciente.getFechaDeNacimiento(), newPaciente.getActivo());
-        ResponseMessage res = new ResponseMessage(200, "creado Correctamente");
-        return Response.status(200).entity(res).build();
-        }
-       
+
     }
 
     @PUT
@@ -90,7 +91,7 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
     public void edit(@PathParam("id") Long id, Paciente entity) {
         super.edit(entity);
     }
-    
+
     @POST
     @Path("/cambiarEstado")
     @Consumes({MediaType.APPLICATION_JSON})
@@ -122,7 +123,7 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
             if (paciente == null) {
                 throw new Exception("Error, el paciente no existe");
             }
-            
+
             PacienteInfoDTO pacienteInfo = new PacienteInfoDTO();
             pacienteInfo.setPacienteInfo(paciente);
             pacienteInfo.setReservas(paciente.getReservas());
@@ -148,7 +149,7 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
     @Produces(MediaType.APPLICATION_JSON)
     public PacienteDTO getById(@PathParam("id") Long id) {
         Paciente paciente = super.find(id);
-        if(paciente != null) {
+        if (paciente != null) {
             PacienteDTO result = new PacienteDTO(paciente.getId(), paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getCorreo(), paciente.getDireccion(), paciente.getFechaDeNacimiento(), paciente.getActivo());
             return result;
 
