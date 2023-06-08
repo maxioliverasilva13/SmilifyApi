@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -33,6 +34,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -84,6 +86,29 @@ public class DienteInfoFacadeREST extends AbstractFacade<DienteInfo> {
         }
     }
 
+    @GET
+    @Path("/infoDientesByPaciente")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response obtenerInfoDientesByPaciente(@QueryParam("pacienteId") Long pacienteId) {
+        try {
+            if (pacienteId == null) {
+                throw new Exception("pacienteId invalido");
+            }
+            Paciente paciente = super.findPaciente(new Long(pacienteId));
+            if (paciente == null) {
+                throw new Exception("Paciente invalido");
+            }
+            Set<DienteInfo> dientesInfo = paciente.obtenerDientesInfo();
+
+            return Response.status(201).entity(dientesInfo).build();
+
+        } catch (Exception e) {
+            ResponseMessage res = new ResponseMessage(403, e.getMessage());
+            return Response.status(201).entity(res).build();
+        }
+    }
+
+    
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

@@ -114,6 +114,10 @@ public class Paciente implements Serializable {
     public String getApellido() {
         return this.apellido;
     }
+    
+    public Set<DienteInfo> obtenerDientesInfo() {
+        return this.infoDientes;
+    }
 
     public String getDireccion() {
         return this.direccion;

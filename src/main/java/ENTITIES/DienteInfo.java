@@ -54,7 +54,7 @@ public class DienteInfo implements Serializable {
         this.dienteId = dienteId;
     }
 
-    public Paciente getPacienteInfo() {
+    public Paciente obtenerPacienteInfo() {
         return pacienteInfo;
     }
 
