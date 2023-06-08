@@ -69,7 +69,7 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
 
         Long id = this.lastId();
 
-        PacienteDTO pacienteDto = new PacienteDTO(paciente.getId(), paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getUsuario().getEmail(), paciente.getDireccion(), paciente.getFechaDeNacimiento(), paciente.getActivo());
+        PacienteDTO pacienteDto = new PacienteDTO(paciente.getId(), paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getCorreo(), paciente.getDireccion(), paciente.getFechaDeNacimiento(), paciente.getActivo());
         ReservaDTO reservaDto = new ReservaDTO(id, newReserva.getEstado(), newReserva.getFecha(), pacienteDto);
         
         ResponseMessage res = new ResponseMessage(200, "Reserva Creada");
@@ -99,7 +99,7 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
 
         // Long id, String estado, Date fecha ,PacienteDTO paciente
         //Long id, String nombre, String apellido, String telefono,String direccion,Date fechaDeNacimiento
-        PacienteDTO pacienteDto = new PacienteDTO(pacienteData.getId(), pacienteData.getNombre(), pacienteData.getApellido(), pacienteData.getTelefono(), pacienteData.getUsuario().getEmail(), pacienteData.getDireccion(), pacienteData.getFechaDeNacimiento(), pacienteData.getActivo());
+        PacienteDTO pacienteDto = new PacienteDTO(pacienteData.getId(), pacienteData.getNombre(), pacienteData.getApellido(), pacienteData.getTelefono(), pacienteData.getCorreo(), pacienteData.getDireccion(), pacienteData.getFechaDeNacimiento(), pacienteData.getActivo());
 
         ReservaDTO result = new ReservaDTO(reserva.getId(), reserva.getEstado(), reserva.getFecha(), pacienteDto);
         return result;
@@ -113,7 +113,7 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
 
         reservas.forEach(reserva -> {
             Paciente pacienteData = reserva.obtenerPaciente();
-            PacienteDTO pacienteDto = new PacienteDTO(pacienteData.getId(), pacienteData.getNombre(), pacienteData.getApellido(), pacienteData.getTelefono(), pacienteData.getUsuario().getEmail(), pacienteData.getDireccion(), pacienteData.getFechaDeNacimiento(), pacienteData.getActivo());
+            PacienteDTO pacienteDto = new PacienteDTO(pacienteData.getId(), pacienteData.getNombre(), pacienteData.getApellido(), pacienteData.getTelefono(), pacienteData.getCorreo(), pacienteData.getDireccion(), pacienteData.getFechaDeNacimiento(), pacienteData.getActivo());
             ReservaDTO reservaDto = new ReservaDTO(reserva.getId(), reserva.getEstado(), reserva.getFecha(), pacienteDto);
             result.add(reservaDto);
         });
@@ -130,9 +130,12 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
         
         reservas.forEach(reserva ->{
              Paciente pacienteData  = reserva.obtenerPaciente();
-             PacienteDTO pacienteDto = new PacienteDTO(pacienteData.getId(), pacienteData.getNombre(), pacienteData.getApellido(), pacienteData.getTelefono(),pacienteData.getUsuario().getEmail(), pacienteData.getDireccion(), pacienteData.getFechaDeNacimiento(), pacienteData.getActivo());
+             if (pacienteData != null) {
+                 PacienteDTO pacienteDto = new PacienteDTO(pacienteData.getId(), pacienteData.getNombre(), pacienteData.getApellido(), pacienteData.getTelefono(),pacienteData.getCorreo(), pacienteData.getDireccion(), pacienteData.getFechaDeNacimiento(), pacienteData.getActivo());
              ReservaDTO reservaDto = new ReservaDTO(reserva.getId(),reserva.getEstado(), reserva.getFecha(),pacienteDto);
              result.add(reservaDto);
+             }
+             
         });
         return result;
     }
@@ -186,7 +189,7 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
 
         reservas.forEach(reserva -> {
             Paciente pacienteData = reserva.getPaciente();
-            PacienteDTO pacienteDto = new PacienteDTO(pacienteData.getId(), pacienteData.getNombre(), pacienteData.getApellido(), pacienteData.getTelefono(), pacienteData.getUsuario().getEmail(), pacienteData.getDireccion(), pacienteData.getFechaDeNacimiento(), pacienteData.getActivo());
+            PacienteDTO pacienteDto = new PacienteDTO(pacienteData.getId(), pacienteData.getNombre(), pacienteData.getApellido(), pacienteData.getTelefono(), pacienteData.getCorreo(), pacienteData.getDireccion(), pacienteData.getFechaDeNacimiento(), pacienteData.getActivo());
             ReservaDTO reservaDto = new ReservaDTO(reserva.getId(), reserva.getEstado(), reserva.getFecha(), pacienteDto);
             result.add(reservaDto);
         });
