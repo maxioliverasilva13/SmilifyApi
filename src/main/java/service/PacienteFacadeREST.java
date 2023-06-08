@@ -11,7 +11,7 @@ import dtos.PacienteCreateDTO;
 import dtos.PacienteDTO;
 import dtos.PacienteInfoDTO;
 import dtos.ResponseMessage;
-import java.net.http.HttpRequest;
+//import java.net.http.HttpRequest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

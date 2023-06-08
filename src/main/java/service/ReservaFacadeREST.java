@@ -6,6 +6,7 @@ package service;
 
 import ENTITIES.Paciente;
 import ENTITIES.Reserva;
+import dtos.CambiarEstadoReservaDTO;
 import dtos.PacienteCreateDTO;
 import dtos.PacienteDTO;
 import dtos.ReservaCreateDTO;
@@ -107,7 +108,7 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<ReservaDTO> listar() {
-        List<Reserva> reservas = super.findAll();
+        List<Reserva> reservas = this.em.createNativeQuery("SELECT * FROM `reserva` WHERE estado = 'En espera'", Reserva.class).getResultList();
         List<ReservaDTO> result = new ArrayList<ReservaDTO>();
 
         reservas.forEach(reserva -> {
@@ -138,7 +139,46 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
         });
         return result;
     }
+    
+    @GET
+    @Path("listarMensual/{month}/{year}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ReservaDTO> listarMensual(@PathParam("month") Integer month, @PathParam("year") Integer year) {
+        System.out.println("numero " + month);
+        List<Reserva> reservas = this.em.createNativeQuery("SELECT * FROM `reserva` WHERE estado = 'aceptada' AND MONTH(fecha) = :month AND YEAR(fecha) = :year", Reserva.class).setParameter("month", month).setParameter("year", year).getResultList();
+        List<ReservaDTO> result =  new ArrayList<>();
+        
+        reservas.forEach(reserva ->{
+             Paciente pacienteData  = reserva.obtenerPaciente();
+             PacienteDTO pacienteDto = new PacienteDTO(pacienteData.getId(), pacienteData.getNombre(), pacienteData.getApellido(), pacienteData.getTelefono(),pacienteData.getUsuario().getEmail(), pacienteData.getDireccion(), pacienteData.getFechaDeNacimiento(), pacienteData.getActivo());
+             ReservaDTO reservaDto = new ReservaDTO(reserva.getId(),reserva.getEstado(), reserva.getFecha(),pacienteDto);
+             result.add(reservaDto);
+        });
+        return result;
+    }
 
+    @POST
+    @Path("cambiarEstado")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response cambiarEstado(CambiarEstadoReservaDTO reserva) {
+        try {
+            if(reserva.operacion.equals("aceptar")){
+                em.createNativeQuery("UPDATE reserva r SET estado = 'aceptada' WHERE r.id = :id").setParameter("id", reserva.id).executeUpdate();
+                ResponseMessage res = new ResponseMessage(200, "Reserva con el id: "+ reserva.id +" aceptada exitosamente.");
+                return Response.status(Response.Status.CREATED).entity(res).build();
+            }else if(reserva.operacion.equals("modificar")){
+                em.createNativeQuery("UPDATE reserva r SET fecha = :fecha").setParameter("fecha", reserva.fecha).executeUpdate();
+                ResponseMessage res = new ResponseMessage(200, "Reserva con el id: "+ reserva.id +" modificada exitosamente. (Se setteó la fecha: "+ reserva.fecha +")");
+                return Response.status(Response.Status.CREATED).entity(res).build();
+            }
+        } catch (Exception e) {
+            ResponseMessage res = new ResponseMessage(500, e.getMessage());
+            return Response.status(Response.Status.CREATED).entity(res).build();
+        }
+        return null;
+    }
+    
     @GET
     @Path("{from}/{to}")
     @Produces(MediaType.APPLICATION_JSON)
