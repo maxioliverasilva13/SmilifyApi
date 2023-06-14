@@ -168,8 +168,12 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
                 ResponseMessage res = new ResponseMessage(200, "Reserva con el id: "+ reserva.id +" aceptada exitosamente.");
                 return Response.status(Response.Status.CREATED).entity(res).build();
             }else if(reserva.operacion.equals("modificar")){
-                em.createNativeQuery("UPDATE reserva r SET fecha = :fecha").setParameter("fecha", reserva.fecha).executeUpdate();
+                em.createNativeQuery("UPDATE reserva r SET fecha = :fecha WHERE id = :id").setParameter("id", reserva.id).setParameter("fecha", reserva.fecha).executeUpdate();
                 ResponseMessage res = new ResponseMessage(200, "Reserva con el id: "+ reserva.id +" modificada exitosamente. (Se setteó la fecha: "+ reserva.fecha +")");
+                return Response.status(Response.Status.CREATED).entity(res).build();
+            }else if(reserva.operacion.equals("rechazar")){
+                em.createNativeQuery("UPDATE reserva r SET estado = 'rechazada' WHERE id = :id").setParameter("id", reserva.id).executeUpdate();
+                ResponseMessage res = new ResponseMessage(200, "Reserva con el id: "+ reserva.id +" rechazada exitosamente.");
                 return Response.status(Response.Status.CREATED).entity(res).build();
             }
         } catch (Exception e) {
