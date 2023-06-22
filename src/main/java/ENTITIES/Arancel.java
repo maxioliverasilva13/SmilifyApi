@@ -35,7 +35,7 @@ public class Arancel implements Serializable {
     @Basic
     String nombre;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private CategoriaArancel categoria;
 
     public Long getId() {
@@ -59,7 +59,7 @@ public class Arancel implements Serializable {
      }
     
     public CategoriaArancel getCategoria(){
-        return null;
+        return this.categoria;
     }
 
     @Override
