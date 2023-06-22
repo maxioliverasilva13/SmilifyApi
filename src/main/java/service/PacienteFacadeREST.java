@@ -62,8 +62,11 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
             newPaciente.setTelefono(pacienteData.telefono);
             newPaciente.setCorreo(pacienteData.correo);
             newPaciente.setDireccion(pacienteData.direccion);
-            newPaciente.setActivo(pacienteData.activo);
-//        newPaciente.setUsuario(user);
+            newPaciente.setActivo(pacienteData.activo); 
+            newPaciente.setOcupacion(pacienteData.ocupacion); 
+            newPaciente.setDatosClinicos(pacienteData.datosClinicos);  
+            
+//          newPaciente.setUsuario(user);
             Date fechaNac = new SimpleDateFormat("dd/MM/yyyy").parse(pacienteData.fechaDeNacimiento);
             newPaciente.setFechaDeNacimiento(fechaNac);
 
@@ -87,9 +90,17 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
 
     @PUT
     @Path("{id}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Long id, Paciente entity) {
-        super.edit(entity);
+    @Consumes( MediaType.APPLICATION_JSON)    
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response edit(@PathParam("id") Long id, Paciente entity) {
+        try {       
+            super.edit(entity);
+            ResponseMessage res = new ResponseMessage(200,"Paciente editado correctamente!");
+            return Response.status(Response.Status.ACCEPTED).entity(res).build();
+        } catch (Exception e) {
+            ResponseMessage res = new ResponseMessage(500, e.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(res).build();
+        }
     }
 
     @POST
@@ -137,7 +148,7 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(res).build();
         }
     }
-
+  
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {

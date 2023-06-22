@@ -9,7 +9,6 @@ package dtos;
  * @author rodrigo
  */
 public class PacienteCreateDTO {
-   
     public Long id;
     public String nombre;
     public String apellido;
@@ -17,5 +16,7 @@ public class PacienteCreateDTO {
     public String telefono;
     public String correo;
     public String fechaDeNacimiento;
-    public boolean activo;
+    public Boolean activo;
+    public String datosClinicos;
+    public String ocupacion;
 }

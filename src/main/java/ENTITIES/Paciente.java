@@ -64,6 +64,17 @@ public class Paciente implements Serializable {
     @Basic
     @Temporal(TemporalType.DATE)
     private Date fechaDeAlta;
+    
+    @Column
+    @Basic
+    private String  datosClinicos;
+    
+    @Column
+    @Basic
+    private String  ocupacion; 
+    
+    
+    
 
     @Column
     @Basic
@@ -158,7 +169,23 @@ public class Paciente implements Serializable {
     public Set<Tratamiento> getTratamientos() {
         return this.tratamientos;
     }
-
+    
+    public String getDatosClinicos(){
+        return this.datosClinicos;
+    }
+    
+    public String getOcupacion(){
+        return this.ocupacion;
+    }
+    
+    
+    public void setDatosClinicos(String datosClinicos){
+        this.datosClinicos = datosClinicos;
+    }
+    
+    public void setOcupacion(String ocupacion){
+        this.ocupacion = ocupacion;
+    }
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
