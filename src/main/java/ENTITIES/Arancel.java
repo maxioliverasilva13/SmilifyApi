@@ -5,6 +5,7 @@
 package ENTITIES;
 
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -16,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -35,6 +37,13 @@ public class Arancel implements Serializable {
     @Basic
     String nombre;
     
+        
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "arancel")
+    private Set<Consulta> consultas;
+    
+    @OneToMany(mappedBy = "arancelLab")
+    private Set<Consulta> consultasArancelLab;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     private CategoriaArancel categoria;
 
@@ -45,9 +54,25 @@ public class Arancel implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Set<Consulta> listarConsultasLab() {
+        return consultasArancelLab;
+    }
+
+    public void setConsultasArancelLab(Set<Consulta> consultasArancelLab) {
+        this.consultasArancelLab = consultasArancelLab;
+    }
     
     public String getNombre(){
         return this.nombre;
+    }
+
+    public Set<Consulta> listarAllConsultas() {
+        return consultas;
+    }
+
+    public void setConsultas(Set<Consulta> consultas) {
+        this.consultas = consultas;
     }
     
     public void setNombre(String nombre){
@@ -60,6 +85,10 @@ public class Arancel implements Serializable {
     
     public CategoriaArancel getCategoria(){
         return null;
+    }
+    
+    public String getType() {
+        return "Arancel";
     }
 
     @Override

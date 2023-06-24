@@ -14,5 +14,8 @@ public class ConsultaCreateDTO {
     public Long pacienteId;
     public Long reservaId; 
     public Long tratamientoId;
-
+    public Long arancelId;
+    public Long arancelLabId;
+    public Long entrega;
+    
 }
