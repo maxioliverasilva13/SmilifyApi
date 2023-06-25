@@ -33,5 +33,10 @@ public class ArancelPrivado extends Arancel {
         this.precio = precio;
     }
     
+    @Override
+    public String getType() {
+        return "ArancelPrivado";
+    }
+    
     
 }

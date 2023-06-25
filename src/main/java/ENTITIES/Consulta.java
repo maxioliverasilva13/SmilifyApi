@@ -5,6 +5,7 @@
 package ENTITIES;
 
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
@@ -34,6 +36,10 @@ public class Consulta implements Serializable {
     
     @Column
     @Basic
+    private Double entrega;
+    
+    @Column
+    @Basic
     private boolean pago;
     
     @ManyToOne(fetch = FetchType.EAGER)
@@ -47,11 +53,12 @@ public class Consulta implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private Tratamiento tratamiento;
     
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Arancel arancel;
     
-   
-   
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Arancel arancelLab;
     
-
     public Long getId() {
         return id;
     }
@@ -64,7 +71,16 @@ public class Consulta implements Serializable {
     public boolean getPago(){
         return this.pago;
     }
-    
+
+    public Arancel getArancelLab() {
+        return arancelLab;
+    }
+
+    public void setArancelLab(Arancel arancelLab) {
+        this.arancelLab = arancelLab;
+    }
+
+   
     public Paciente getPaciente(){
         return null;
     }
@@ -72,7 +88,17 @@ public class Consulta implements Serializable {
     public Reserva getReserva(){
         return this.reserva;
     }
+
+    public Arancel getArancel() {
+        return arancel;
+    }
+
+    public void setArancel(Arancel arancel) {
+        this.arancel = arancel;
+    }
     
+    
+
     public Tratamiento getTratamiento(){
         return this.tratamiento;
     }
@@ -126,5 +152,15 @@ public class Consulta implements Serializable {
     public String toString() {
         return "ENTITIES.Consulta[ id=" + id + " ]";
     }
+
+    public Double getEntrega() {
+        return entrega;
+    }
+
+    public void setEntrega(Double entrega) {
+        this.entrega = entrega;
+    }
+    
+    
     
 }

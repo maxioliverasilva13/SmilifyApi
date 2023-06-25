@@ -44,6 +44,29 @@ public class TratamientoFacadeREST extends AbstractFacade<Tratamiento> {
     public TratamientoFacadeREST() {
         super(Tratamiento.class);
     }
+    
+//    @GET
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response listarTratamientosByPaciente(@PathParam("id") Long id) {
+//        try {
+//            Paciente paciente = this.em.find(Paciente.class, tratInfo.getPaciente_id());
+//            if (paciente == null) {
+//                throw new Exception("Error, el paciente no existe");
+//            }
+//            Tratamiento newTratamiento = new Tratamiento();
+//            newTratamiento.setDescripcion(tratInfo.getDescripcion());
+//            newTratamiento.setPaciente(paciente);
+//            this.em.persist(newTratamiento);
+//            ResponseMessage res = new ResponseMessage(200, "Tratamiento creado correctamente");
+//            return Response.status(Response.Status.CREATED).entity(res).build();
+//
+//        } catch (Exception e) {
+//            ResponseMessage res = new ResponseMessage(400, e.getMessage());
+//            return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
+//        }
+//
+//    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -57,6 +80,7 @@ public class TratamientoFacadeREST extends AbstractFacade<Tratamiento> {
             Tratamiento newTratamiento = new Tratamiento();
             newTratamiento.setDescripcion(tratInfo.getDescripcion());
             newTratamiento.setPaciente(paciente);
+            newTratamiento.setStatus("Activo");
             this.em.persist(newTratamiento);
             ResponseMessage res = new ResponseMessage(200, "Tratamiento creado correctamente");
             return Response.status(Response.Status.CREATED).entity(res).build();

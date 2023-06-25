@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -71,7 +72,7 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
 
         PacienteDTO pacienteDto = new PacienteDTO(paciente.getId(), paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getCorreo(), paciente.getDireccion(), paciente.getFechaDeNacimiento(), paciente.getActivo());
         ReservaDTO reservaDto = new ReservaDTO(id, newReserva.getEstado(), newReserva.getFecha(), pacienteDto);
-        
+
         ResponseMessage res = new ResponseMessage(200, "Reserva Creada");
         return Response.status(Response.Status.CREATED).entity(res).build();
 
@@ -106,6 +107,23 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
     }
 
     @GET
+    @Path("/reservasByPaciente/{pacienteId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listarReservasDisponiblesPaciente(@PathParam("pacienteId") Long pacienteId) {
+        try {
+            if (pacienteId == null) {
+                throw new Exception("Paciente id invalido");
+            }
+            System.out.println("query is " + "SELECT * FROM `Reserva` as reserva where reserva.paciente_id=" + pacienteId + " and not exists (select * from `Consulta` where paciente_id=reserva.paciente_id )");
+            List<Reserva> reservas = (List<Reserva>) this.em.createNativeQuery("SELECT * FROM `Reserva` as reserva where reserva.paciente_id=" + pacienteId + " and not exists (select * from `Consulta` where paciente_id=reserva.paciente_id )", Reserva.class).getResultList();
+            return Response.status(Response.Status.CREATED).entity(reservas).build();
+        } catch (Exception e) {
+            ResponseMessage res = new ResponseMessage(500, e.getMessage());
+            return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
+        }
+    }
+
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<ReservaDTO> listar() {
         List<Reserva> reservas = this.em.createNativeQuery("SELECT * FROM `reserva` WHERE estado = 'En espera'", Reserva.class).getResultList();
@@ -120,39 +138,39 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
         return result;
 
     }
-    
+
     @GET
     @Path("listarHoy")
     @Produces(MediaType.APPLICATION_JSON)
     public List<ReservaDTO> listarHoy() {
         List<Reserva> reservas = this.em.createNativeQuery("SELECT * FROM `reserva` WHERE estado = 'aceptada' AND fecha >= CURRENT_DATE AND fecha < DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY)", Reserva.class).getResultList();
-        List<ReservaDTO> result =  new ArrayList<ReservaDTO>();
-        
-        reservas.forEach(reserva ->{
-             Paciente pacienteData  = reserva.obtenerPaciente();
-             if (pacienteData != null) {
-                 PacienteDTO pacienteDto = new PacienteDTO(pacienteData.getId(), pacienteData.getNombre(), pacienteData.getApellido(), pacienteData.getTelefono(),pacienteData.getCorreo(), pacienteData.getDireccion(), pacienteData.getFechaDeNacimiento(), pacienteData.getActivo());
-             ReservaDTO reservaDto = new ReservaDTO(reserva.getId(),reserva.getEstado(), reserva.getFecha(),pacienteDto);
-             result.add(reservaDto);
-             }
-             
+        List<ReservaDTO> result = new ArrayList<ReservaDTO>();
+
+        reservas.forEach(reserva -> {
+            Paciente pacienteData = reserva.obtenerPaciente();
+            if (pacienteData != null) {
+                PacienteDTO pacienteDto = new PacienteDTO(pacienteData.getId(), pacienteData.getNombre(), pacienteData.getApellido(), pacienteData.getTelefono(), pacienteData.getCorreo(), pacienteData.getDireccion(), pacienteData.getFechaDeNacimiento(), pacienteData.getActivo());
+                ReservaDTO reservaDto = new ReservaDTO(reserva.getId(), reserva.getEstado(), reserva.getFecha(), pacienteDto);
+                result.add(reservaDto);
+            }
+
         });
         return result;
     }
-    
+
     @GET
     @Path("listarMensual/{month}/{year}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<ReservaDTO> listarMensual(@PathParam("month") Integer month, @PathParam("year") Integer year) {
-             System.out.println("numero " + month);
+        System.out.println("numero " + month);
         List<Reserva> reservas = this.em.createNativeQuery("SELECT * FROM `reserva` WHERE estado = 'aceptada' AND MONTH(fecha) = :month AND YEAR(fecha) = :year", Reserva.class).setParameter("month", month).setParameter("year", year).getResultList();
-        List<ReservaDTO> result =  new ArrayList<>();
-        
-        reservas.forEach(reserva ->{
-             Paciente pacienteData  = reserva.obtenerPaciente();
-             PacienteDTO pacienteDto = new PacienteDTO(pacienteData.getId(), pacienteData.getNombre(), pacienteData.getApellido(), pacienteData.getTelefono(),pacienteData.getCorreo(), pacienteData.getDireccion(), pacienteData.getFechaDeNacimiento(), pacienteData.getActivo());
-             ReservaDTO reservaDto = new ReservaDTO(reserva.getId(),reserva.getEstado(), reserva.getFecha(),pacienteDto);
-             result.add(reservaDto);
+        List<ReservaDTO> result = new ArrayList<>();
+
+        reservas.forEach(reserva -> {
+            Paciente pacienteData = reserva.obtenerPaciente();
+            PacienteDTO pacienteDto = new PacienteDTO(pacienteData.getId(), pacienteData.getNombre(), pacienteData.getApellido(), pacienteData.getTelefono(), pacienteData.getCorreo(), pacienteData.getDireccion(), pacienteData.getFechaDeNacimiento(), pacienteData.getActivo());
+            ReservaDTO reservaDto = new ReservaDTO(reserva.getId(), reserva.getEstado(), reserva.getFecha(), pacienteDto);
+            result.add(reservaDto);
         });
         return result;
     }
@@ -163,17 +181,17 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
     @Produces(MediaType.APPLICATION_JSON)
     public Response cambiarEstado(CambiarEstadoReservaDTO reserva) {
         try {
-            if(reserva.operacion.equals("aceptar")){
+            if (reserva.operacion.equals("aceptar")) {
                 em.createNativeQuery("UPDATE reserva r SET estado = 'aceptada' WHERE r.id = :id").setParameter("id", reserva.id).executeUpdate();
-                ResponseMessage res = new ResponseMessage(200, "Reserva con el id: "+ reserva.id +" aceptada exitosamente.");
+                ResponseMessage res = new ResponseMessage(200, "Reserva con el id: " + reserva.id + " aceptada exitosamente.");
                 return Response.status(Response.Status.CREATED).entity(res).build();
-            }else if(reserva.operacion.equals("modificar")){
+            } else if (reserva.operacion.equals("modificar")) {
                 em.createNativeQuery("UPDATE reserva r SET fecha = :fecha WHERE id = :id").setParameter("id", reserva.id).setParameter("fecha", reserva.fecha).executeUpdate();
-                ResponseMessage res = new ResponseMessage(200, "Reserva con el id: "+ reserva.id +" modificada exitosamente. (Se setteó la fecha: "+ reserva.fecha +")");
+                ResponseMessage res = new ResponseMessage(200, "Reserva con el id: " + reserva.id + " modificada exitosamente. (Se setteó la fecha: " + reserva.fecha + ")");
                 return Response.status(Response.Status.CREATED).entity(res).build();
-            }else if(reserva.operacion.equals("rechazar")){
+            } else if (reserva.operacion.equals("rechazar")) {
                 em.createNativeQuery("UPDATE reserva r SET estado = 'rechazada' WHERE id = :id").setParameter("id", reserva.id).executeUpdate();
-                ResponseMessage res = new ResponseMessage(200, "Reserva con el id: "+ reserva.id +" rechazada exitosamente.");
+                ResponseMessage res = new ResponseMessage(200, "Reserva con el id: " + reserva.id + " rechazada exitosamente.");
                 return Response.status(Response.Status.CREATED).entity(res).build();
             }
         } catch (Exception e) {
@@ -182,7 +200,7 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
         }
         return null;
     }
-    
+
     @GET
     @Path("{from}/{to}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -235,7 +253,7 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
         ResponseMessage res = new ResponseMessage(200, "El usuario no tiene una reserva");
         return Response.status(Response.Status.OK).entity(verifyReserva).build();
     }
-    
+
     private boolean reservasByUserId(Long id) {
         boolean tieneResultado;
         try {
@@ -248,41 +266,40 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
         }
         return tieneResultado;
     }
-    
+
     @GET
     @Path("/obtenerFechasByFechas")
     @Produces(MediaType.APPLICATION_JSON)
     public Response validateReservaByUserId(@QueryParam("fecha") String fecha) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        
+
         try {
-           Date date = dateFormat.parse(fecha);
+            Date date = dateFormat.parse(fecha);
         } catch (Exception e) {
-           ResponseMessage res = new ResponseMessage(400, "Formato de fecha incorrecto");
-           return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
+            ResponseMessage res = new ResponseMessage(400, "Formato de fecha incorrecto");
+            return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
         }
-        
-        
+
         List<Date> fechas = reservasByFecha(fecha);
-        
+
         if (fechas == null) {
             ResponseMessage res = new ResponseMessage(200, "Todos los horarios estan disponibles");
             return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
         }
-        
+
         return Response.status(Response.Status.OK).entity(fechas).build();
-    
+
     }
-    
+
     private List<Date> reservasByFecha(String fecha) {
         try {
-            List<Date> fechas =(List<Date>) getEntityManager().createNativeQuery("SELECT fecha FROM reserva WHERE fecha like '" + fecha + "%';").getResultList();
-            
+            List<Date> fechas = (List<Date>) getEntityManager().createNativeQuery("SELECT fecha FROM reserva WHERE fecha like '" + fecha + "%';").getResultList();
+
             return fechas;
         } catch (NoResultException e) {
             // Si no se obtiene ningún resultado, se asigna false a la variable tieneResultado
             return null;
         }
-        
+
     }
 }

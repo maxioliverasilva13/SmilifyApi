@@ -4,6 +4,8 @@
  */
 package service;
 
+import ENTITIES.Arancel;
+import ENTITIES.ArancelLaboratorio;
 import ENTITIES.Consulta;
 import ENTITIES.Paciente;
 import ENTITIES.Reserva;
@@ -49,117 +51,127 @@ public class ConsultaFacadeREST extends AbstractFacade<Consulta> {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response create(ConsultaCreateDTO newConsultaDto) {
-       
-        try{
-            Paciente paciente = this.em.find(Paciente.class, newConsultaDto.pacienteId);           
-            if(paciente == null){
-                ResponseMessage res =  new ResponseMessage(400,"El paciente no existe");
+
+        try {
+            Paciente paciente = this.em.find(Paciente.class, newConsultaDto.pacienteId);
+            if (paciente == null) {
+                ResponseMessage res = new ResponseMessage(400, "El paciente no existe");
                 return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
             }
+            Arancel arancel = this.em.find(Arancel.class, newConsultaDto.arancelId);
+            if (arancel == null) {
+                ResponseMessage res = new ResponseMessage(400, "El arancel no existe");
+                return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
+            }
+
             Consulta newConsulta = new Consulta();
             newConsulta.setDescripcion(newConsultaDto.descripcion);
             newConsulta.setPago(newConsultaDto.pago);
             newConsulta.setPaciente(paciente);
+            newConsulta.setArancel(arancel);
+            newConsulta.setEntrega(newConsultaDto.entrega.doubleValue());
 
-            if(newConsultaDto.reservaId != null){
-                Reserva reserva = this.em.find(Reserva.class, newConsultaDto.reservaId);           
-                 if(reserva == null){
-                     ResponseMessage res =  new ResponseMessage(400,"La reserva no existe");
-                     return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
-                 }
-                 newConsulta.setReserva(reserva);
+            if (newConsultaDto.reservaId != null) {
+                Reserva reserva = this.em.find(Reserva.class, newConsultaDto.reservaId);
+                if (reserva == null) {
+                    ResponseMessage res = new ResponseMessage(400, "La reserva no existe");
+                    return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
+                }
+                newConsulta.setReserva(reserva);
             }
-            if(newConsultaDto.tratamientoId != null){
-                Tratamiento tratamiento = this.em.find(Tratamiento.class, newConsultaDto.tratamientoId);           
-                 if(tratamiento == null){
-                     ResponseMessage res =  new ResponseMessage(400,"El tratamiento no existe");
-                     return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
-                 }
-                 newConsulta.setTratamiento(tratamiento);
+
+            if (newConsultaDto.arancelLabId != null) {
+                ArancelLaboratorio arancelLab = this.em.find(ArancelLaboratorio.class, newConsultaDto.arancelLabId);
+                if (arancelLab == null) {
+                    ResponseMessage res = new ResponseMessage(400, "El arancel de laboratorio no existe");
+                    return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
+                }
+                newConsulta.setArancelLab(arancelLab);
+            }
+            if (newConsultaDto.tratamientoId != null) {
+                Tratamiento tratamiento = this.em.find(Tratamiento.class, newConsultaDto.tratamientoId);
+                if (tratamiento == null) {
+                    ResponseMessage res = new ResponseMessage(400, "El tratamiento no existe");
+                    return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
+                }
+                newConsulta.setTratamiento(tratamiento);
             }
             super.create(newConsulta);
 
-            PacienteDTO pacienteDto = new PacienteDTO(paciente.getId(),paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getUsuario().getEmail(), paciente.getDireccion(), paciente.getFechaDeNacimiento(), paciente.getActivo());
-            ConsultaDTO  consultaDto = new ConsultaDTO(newConsulta.getId(), newConsulta.getDescripcion(), newConsulta.getPago(), pacienteDto );
+            ResponseMessage response = new ResponseMessage(200, "Consulta creada correctamente");
+            return Response.status(Response.Status.CREATED).entity(response).build();
 
-            return Response.status(Response.Status.CREATED).entity(consultaDto).build();
-            
-        }catch(Exception e){
-                 ResponseMessage res =  new ResponseMessage(500,"Ha ocurrido un error inesperado");
-                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(res).build();
+        } catch (Exception e) {
+            ResponseMessage res = new ResponseMessage(500, e.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(res).build();
         }
-          
-  
-      
+
     }
 
     @PUT
     @Path("{id}")
-    @Consumes( MediaType.APPLICATION_JSON)
-    @Produces( MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response edit(@PathParam("id") Long id, ConsultaUpdateDTO updateConsulta) {
-        try{
+        try {
             Consulta consulta = super.find(id);
-            if(consulta ==  null){
-               ResponseMessage res =  new ResponseMessage(400,"Consulta no existe");
+            if (consulta == null) {
+                ResponseMessage res = new ResponseMessage(400, "Consulta no existe");
                 return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
             }
-            
-            Paciente paciente = this.em.find(Paciente.class, updateConsulta.pacienteId);           
-            if(paciente == null){
-                ResponseMessage res =  new ResponseMessage(400,"El paciente no existe");
+
+            Paciente paciente = this.em.find(Paciente.class, updateConsulta.pacienteId);
+            if (paciente == null) {
+                ResponseMessage res = new ResponseMessage(400, "El paciente no existe");
                 return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
             }
-            
-            if(updateConsulta.reservaId != null && 
-                    (consulta.getReserva() == null || updateConsulta.reservaId != consulta.getReserva().getId()  )){
-                Reserva reserva = this.em.find(Reserva.class, updateConsulta.reservaId);           
-                 if(reserva == null){
-                     ResponseMessage res =  new ResponseMessage(400,"La reserva no existe");
-                     return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
-                 }
-                 consulta.setReserva(reserva);
+
+            if (updateConsulta.reservaId != null
+                    && (consulta.getReserva() == null || updateConsulta.reservaId != consulta.getReserva().getId())) {
+                Reserva reserva = this.em.find(Reserva.class, updateConsulta.reservaId);
+                if (reserva == null) {
+                    ResponseMessage res = new ResponseMessage(400, "La reserva no existe");
+                    return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
+                }
+                consulta.setReserva(reserva);
             }
-            if(updateConsulta.tratamientoId != null  && 
-                    (consulta.getTratamiento()== null || updateConsulta.tratamientoId != consulta.getTratamiento().getId()  )){
-                Tratamiento tratamiento = this.em.find(Tratamiento.class, updateConsulta.tratamientoId);           
-                 if(tratamiento == null){
-                     ResponseMessage res =  new ResponseMessage(400,"El tratamiento no existe");
-                     return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
-                 }
-                 consulta.setTratamiento(tratamiento);
+            if (updateConsulta.tratamientoId != null
+                    && (consulta.getTratamiento() == null || updateConsulta.tratamientoId != consulta.getTratamiento().getId())) {
+                Tratamiento tratamiento = this.em.find(Tratamiento.class, updateConsulta.tratamientoId);
+                if (tratamiento == null) {
+                    ResponseMessage res = new ResponseMessage(400, "El tratamiento no existe");
+                    return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
+                }
+                consulta.setTratamiento(tratamiento);
             }
-            
+
             consulta.setPaciente(paciente);
             consulta.setDescripcion(updateConsulta.descripcion);
             consulta.setPago(updateConsulta.pago);
             super.edit(consulta);
-            ResponseMessage res =  new ResponseMessage(200,"Consulta editada correctamente");
+            ResponseMessage res = new ResponseMessage(200, "Consulta editada correctamente");
             return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
-        }catch(Exception e){
-             ResponseMessage res =  new ResponseMessage(500,"Ha ocurrido un error inesperado");
-             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(res).build();
+        } catch (Exception e) {
+            ResponseMessage res = new ResponseMessage(500, "Ha ocurrido un error inesperado");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(res).build();
         }
-       
-      
-        
+
     }
 
     @DELETE
     @Path("{id}")
-    @Consumes( MediaType.APPLICATION_JSON)
-    @Produces( MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response remove(@PathParam("id") Long id) {
         Consulta consulta = super.find(id);
-        if(consulta ==  null){
-           ResponseMessage res =  new ResponseMessage(400,"Consulta no existe");
-           return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
+        if (consulta == null) {
+            ResponseMessage res = new ResponseMessage(400, "Consulta no existe");
+            return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
         }
         super.remove(consulta);
-        ResponseMessage res =  new ResponseMessage(200,"Consulta eliominada correctamente");
+        ResponseMessage res = new ResponseMessage(200, "Consulta eliominada correctamente");
         return Response.status(Response.Status.ACCEPTED).entity(res).build();
-        
-   
+
     }
 
     @GET
@@ -167,37 +179,32 @@ public class ConsultaFacadeREST extends AbstractFacade<Consulta> {
     @Produces(MediaType.APPLICATION_JSON)
     public Response find(@PathParam("id") Long id) {
         Consulta consulta = super.find(id);
-        if(consulta ==  null){
-           ResponseMessage res =  new ResponseMessage(400,"Consulta no existe");
-           return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
+        if (consulta == null) {
+            ResponseMessage res = new ResponseMessage(400, "Consulta no existe");
+            return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
         }
-        
-       Paciente paciente =  consulta.getPaciente();
-       PacienteDTO pacienteDto = new PacienteDTO(paciente.getId(),paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getUsuario().getEmail(), paciente.getDireccion(), paciente.getFechaDeNacimiento(), paciente.getActivo());
-       ConsultaDTO consultaRes = new ConsultaDTO(consulta.getId(),consulta.getDescripcion(), consulta.getPago(),pacienteDto);
-       return Response.status(Response.Status.ACCEPTED).entity(consultaRes).build();
-    }
 
-   
+        Paciente paciente = consulta.getPaciente();
+        PacienteDTO pacienteDto = new PacienteDTO(paciente.getId(), paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getUsuario().getEmail(), paciente.getDireccion(), paciente.getFechaDeNacimiento(), paciente.getActivo());
+        ConsultaDTO consultaRes = new ConsultaDTO(consulta.getId(), consulta.getDescripcion(), consulta.getPago(), pacienteDto);
+        return Response.status(Response.Status.ACCEPTED).entity(consultaRes).build();
+    }
 
     @GET
     @Path("{from}/{to}")
-    @Produces( MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         List<Consulta> consultasArr = super.findRange(new int[]{from, to});
-        List<ConsultaDTO> result =  new ArrayList<ConsultaDTO>();
+        List<ConsultaDTO> result = new ArrayList<ConsultaDTO>();
 
-        consultasArr.forEach(consulta ->{
+        consultasArr.forEach(consulta -> {
             Paciente paciente = consulta.getPaciente();
-            PacienteDTO pacienteDto = new PacienteDTO(paciente.getId(),paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getUsuario().getEmail(), paciente.getDireccion(), paciente.getFechaDeNacimiento(), paciente.getActivo());
-            result.add(new ConsultaDTO(consulta.getId(),consulta.getDescripcion(), consulta.getPago(),pacienteDto));
+            PacienteDTO pacienteDto = new PacienteDTO(paciente.getId(), paciente.getNombre(), paciente.getApellido(), paciente.getTelefono(), paciente.getUsuario().getEmail(), paciente.getDireccion(), paciente.getFechaDeNacimiento(), paciente.getActivo());
+            result.add(new ConsultaDTO(consulta.getId(), consulta.getDescripcion(), consulta.getPago(), pacienteDto));
         });
-         
+
         return Response.status(Response.Status.ACCEPTED).entity(result).build();
     }
-    
-    
-   
 
     @GET
     @Path("count")
@@ -210,5 +217,5 @@ public class ConsultaFacadeREST extends AbstractFacade<Consulta> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }
