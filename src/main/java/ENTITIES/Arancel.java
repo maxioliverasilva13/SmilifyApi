@@ -37,6 +37,7 @@ public class Arancel implements Serializable {
     @Basic
     String nombre;
     
+
         
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "arancel")
     private Set<Consulta> consultas;
@@ -84,7 +85,7 @@ public class Arancel implements Serializable {
      }
     
     public CategoriaArancel getCategoria(){
-        return null;
+        return this.categoria;
     }
     
     public String getType() {

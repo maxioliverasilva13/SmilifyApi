@@ -67,8 +67,10 @@ public class CategoriaArancelFacadeREST extends AbstractFacade<CategoriaArancel>
     @GET
     @Produces({ MediaType.APPLICATION_JSON})
     public Response listar() {
-        List<CategoriaArancel> categoria =  super.findAll();
-        return Response.status(200).entity(categoria).build();
+        List<CategoriaArancel> categorias =  super.findAll();
+        return Response.status(200).entity(categorias).build();
+
+       // return Response.status(200).entity(categoria).build();
     }
 
     @GET
