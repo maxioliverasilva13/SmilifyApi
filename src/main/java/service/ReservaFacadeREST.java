@@ -162,8 +162,7 @@ public class ReservaFacadeREST extends AbstractFacade<Reserva> {
     @Path("listarMensual/{month}/{year}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<ReservaDTO> listarMensual(@PathParam("month") Integer month, @PathParam("year") Integer year) {
-        System.out.println("numero " + month);
-        List<Reserva> reservas = this.em.createNativeQuery("SELECT * FROM `reserva` WHERE estado = 'aceptada' AND MONTH(fecha) = :month AND YEAR(fecha) = :year", Reserva.class).setParameter("month", month).setParameter("year", year).getResultList();
+        List<Reserva> reservas = this.em.createNativeQuery("SELECT * FROM reserva WHERE estado = 'aceptada' AND (MONTH(fecha) BETWEEN IF(:month>1, :month-1, 12) AND IF(:month<12, :month+1, 1)) AND YEAR(fecha) = :year", Reserva.class).setParameter("month", month).setParameter("year", year).getResultList();
         List<ReservaDTO> result = new ArrayList<>();
 
         reservas.forEach(reserva -> {
