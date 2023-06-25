@@ -45,7 +45,7 @@ public class Arancel implements Serializable {
     @OneToMany(mappedBy = "arancelLab")
     private Set<Consulta> consultasArancelLab;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     private CategoriaArancel categoria;
 
     public Long getId() {

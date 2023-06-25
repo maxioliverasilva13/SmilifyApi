@@ -48,13 +48,13 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
     }
 
     @POST
-    @Consumes({MediaType.APPLICATION_JSON})
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response crear(PacienteCreateDTO pacienteData) {
 
 //        Usuario user = (Usuario) request.getAttribute("userData");
         try {
-
+            System.out.println("aca 1");
             Paciente newPaciente = new Paciente();
             newPaciente.setId(pacienteData.id);
             newPaciente.setNombre(pacienteData.nombre);
@@ -62,15 +62,22 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
             newPaciente.setTelefono(pacienteData.telefono);
             newPaciente.setCorreo(pacienteData.correo);
             newPaciente.setDireccion(pacienteData.direccion);
-            newPaciente.setActivo(pacienteData.activo); 
-            newPaciente.setOcupacion(pacienteData.ocupacion); 
-            newPaciente.setDatosClinicos(pacienteData.datosClinicos);  
-            
+            newPaciente.setActivo(pacienteData.activo);
+            if (pacienteData.ocupacion != null){
+                newPaciente.setOcupacion(pacienteData.ocupacion);
+            }
+            if (pacienteData.datosClinicos != null) {
+                newPaciente.setDatosClinicos(pacienteData.datosClinicos);
+            }
+            System.out.println("aca 2");
+
 //          newPaciente.setUsuario(user);
             Date fechaNac = new SimpleDateFormat("dd/MM/yyyy").parse(pacienteData.fechaDeNacimiento);
             newPaciente.setFechaDeNacimiento(fechaNac);
 
             Paciente test = super.find(pacienteData.id);
+                        System.out.println("aca 3");
+
             if (test != null) {
                 ResponseMessage res = new ResponseMessage(400, "Ya existe un usuario con esa cedula");
                 return Response.status(Response.Status.BAD_REQUEST).entity(res).build();
@@ -90,12 +97,12 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
 
     @PUT
     @Path("{id}")
-    @Consumes( MediaType.APPLICATION_JSON)    
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response edit(@PathParam("id") Long id, Paciente entity) {
-        try {       
+        try {
             super.edit(entity);
-            ResponseMessage res = new ResponseMessage(200,"Paciente editado correctamente!");
+            ResponseMessage res = new ResponseMessage(200, "Paciente editado correctamente!");
             return Response.status(Response.Status.ACCEPTED).entity(res).build();
         } catch (Exception e) {
             ResponseMessage res = new ResponseMessage(500, e.getMessage());
@@ -126,14 +133,16 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
 
     @GET
     @Path("/getPacienteInfo/{id}")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response findPacienteById(@PathParam("id") Long id) {
         try {
+            System.out.println("aca 1");
             Paciente paciente = this.em.find(Paciente.class, id);
             if (paciente == null) {
                 throw new Exception("Error, el paciente no existe");
             }
+                        System.out.println("aca 2");
 
             PacienteInfoDTO pacienteInfo = new PacienteInfoDTO();
             pacienteInfo.setPacienteInfo(paciente);
@@ -141,6 +150,7 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
             pacienteInfo.setTratamientos(paciente.getTratamientos());
             pacienteInfo.setArchivos(paciente.getArchivo());
             pacienteInfo.setConsultas(paciente.getConsultas());
+            System.out.println("aca 3");
 
             return Response.status(Response.Status.ACCEPTED).entity(pacienteInfo).build();
         } catch (Exception e) {
@@ -148,7 +158,7 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(res).build();
         }
     }
-  
+
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {

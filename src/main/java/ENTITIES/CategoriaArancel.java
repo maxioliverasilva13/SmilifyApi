@@ -34,7 +34,7 @@ public class CategoriaArancel implements Serializable {
     @Basic
     private String nombreCategoria;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria", fetch = FetchType.EAGER,orphanRemoval=true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria", fetch = FetchType.LAZY,orphanRemoval=true)
     private List<Arancel> aranceles = new ArrayList<Arancel>(); 
 
     
@@ -47,7 +47,7 @@ public class CategoriaArancel implements Serializable {
         this.id = id;
     }
     
-    public String getNombre(){
+    public String getNombreCategoria(){
         return this.nombreCategoria;
     }
     
@@ -55,7 +55,7 @@ public class CategoriaArancel implements Serializable {
         return new ArrayList<Arancel>();
     }
     
-    public void setNombre(String nombre){
+    public void setNombreCategoria(String nombre){
         this.nombreCategoria = nombre;
     }
     
