@@ -80,6 +80,7 @@ public class ArancelFacadeREST extends AbstractFacade<Arancel> {
         return super.findAll();
     }
     
+    
     @Consumes( MediaType.APPLICATION_JSON)
     @Produces( MediaType.APPLICATION_JSON)
     public Response listar() {
