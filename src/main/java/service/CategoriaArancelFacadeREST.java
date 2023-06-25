@@ -98,7 +98,7 @@ public class CategoriaArancelFacadeREST extends AbstractFacade<CategoriaArancel>
             } else {
                super.create(entity);
                CategoriaArancel newArancel = (CategoriaArancel)this.em.createNativeQuery("select * from CategoriaArancel where nombre='" + entity.getNombre() + "'", CategoriaArancel.class).getSingleResult();
-               return Response.status(500).entity(newArancel).build();
+               return Response.status(200).entity(newArancel).build();
             }
         } catch (Exception e) {
             ResponseMessage rm = new ResponseMessage(500, e.getMessage());
