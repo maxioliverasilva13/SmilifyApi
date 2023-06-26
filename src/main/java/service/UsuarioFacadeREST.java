@@ -5,6 +5,10 @@
 package service;
 
 import ENTITIES.Usuario;
+import dtos.ResponseMessage;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -18,6 +22,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -80,6 +85,43 @@ public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
         return String.valueOf(super.count());
+    }
+    
+    @GET
+    @Path("estadisticas")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response estadisticas() {
+        LocalDate fechaActual = LocalDate.now();
+        LocalDate primerDiaMes = fechaActual.withDayOfMonth(1);
+        String fechaFormateada = primerDiaMes.toString();
+        
+       BigInteger Pacientes =(BigInteger) getEntityManager().createNativeQuery("select count(DISTINCT consulta.paciente_id) from reserva  RIGHT join consulta on consulta.reserva_id = reserva.id WHERE reserva.fecha >='" + fechaFormateada + "%';").getSingleResult();
+       
+       BigInteger Consultas =(BigInteger) getEntityManager().createNativeQuery("select count(consulta.id) from reserva RIGHT join consulta on consulta.reserva_id = reserva.id WHERE reserva.fecha >='" + fechaFormateada + "%';").getSingleResult();
+       
+      
+       BigInteger Nuevos =(BigInteger) getEntityManager().createNativeQuery("SELECT COUNT(DISTINCT consulta.paciente_id) \n" +
+                                                                                                                                              "FROM reserva \n" +
+                                                                                                                                              "RIGHT JOIN consulta ON consulta.reserva_id = reserva.id \n" +
+                                                                                                                                              "WHERE reserva.fecha >= '" + fechaFormateada + "'\n" +
+                                                                                                                                              "AND consulta.paciente_id NOT IN (\n" +
+                                                                                                                                              "	SELECT DISTINCT consulta.paciente_id \n" +
+                                                                                                                                              "                 FROM reserva\n" +
+                                                                                                                                                "               RIGHT JOIN consulta ON consulta.reserva_id = reserva.id\n" +
+                                                                                                                                                "               WHERE reserva.fecha < '" + fechaFormateada + "'\n" +
+                                                                                                                                                ");").getSingleResult();
+       
+       double GananciasDouble =(double) getEntityManager().createNativeQuery("select CASE WHEN sum(consulta.entrega) IS NULL THEN 0 ELSE SUM(consulta.entrega) END AS total  from reserva RIGHT join consulta on consulta.reserva_id = reserva.id WHERE reserva.fecha >='" + fechaFormateada + "%';").getSingleResult();
+       
+       BigDecimal gananciasDecimal = BigDecimal.valueOf(GananciasDouble);
+       BigInteger ganancias = gananciasDecimal.toBigIntegerExact();
+       
+       
+       BigInteger[] estadisticas = {Pacientes, Consultas, Nuevos, ganancias};
+        
+        //return Response.status(Response.Status.OK).entity(fechaFormateada).build();
+        ResponseMessage res = new ResponseMessage(500, fechaFormateada);
+            return Response.status(Response.Status.OK).entity(estadisticas).build();
     }
 
     @Override
