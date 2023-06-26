@@ -99,6 +99,7 @@ public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
        
        BigInteger Consultas =(BigInteger) getEntityManager().createNativeQuery("select count(consulta.id) from reserva RIGHT join consulta on consulta.reserva_id = reserva.id WHERE reserva.fecha >='" + fechaFormateada + "%';").getSingleResult();
        
+      
        BigInteger Nuevos =(BigInteger) getEntityManager().createNativeQuery("SELECT COUNT(DISTINCT consulta.paciente_id) \n" +
                                                                                                                                               "FROM reserva \n" +
                                                                                                                                               "RIGHT JOIN consulta ON consulta.reserva_id = reserva.id \n" +
@@ -110,9 +111,12 @@ public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
                                                                                                                                                 "               WHERE reserva.fecha < '" + fechaFormateada + "'\n" +
                                                                                                                                                 ");").getSingleResult();
        
-       double GananciasDouble =(double) getEntityManager().createNativeQuery("select sum(consulta.entrega)  from reserva RIGHT join consulta on consulta.reserva_id = reserva.id WHERE reserva.fecha >='" + fechaFormateada + "%';").getSingleResult();
+       double GananciasDouble =(double) getEntityManager().createNativeQuery("select CASE WHEN sum(consulta.entrega) IS NULL THEN 0 ELSE SUM(consulta.entrega) END AS total  from reserva RIGHT join consulta on consulta.reserva_id = reserva.id WHERE reserva.fecha >='" + fechaFormateada + "%';").getSingleResult();
+       
        BigDecimal gananciasDecimal = BigDecimal.valueOf(GananciasDouble);
-       BigInteger ganancias = gananciasDecimal.toBigInteger();
+       BigInteger ganancias = gananciasDecimal.toBigIntegerExact();
+       
+       
        BigInteger[] estadisticas = {Pacientes, Consultas, Nuevos, ganancias};
         
         //return Response.status(Response.Status.OK).entity(fechaFormateada).build();
