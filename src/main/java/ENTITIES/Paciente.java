@@ -170,6 +170,8 @@ public class Paciente implements Serializable {
         return this.tratamientos;
     }
     
+    
+    
     public String getDatosClinicos(){
         return this.datosClinicos;
     }

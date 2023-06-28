@@ -71,14 +71,7 @@ public class ArancelFacadeREST extends AbstractFacade<Arancel> {
         return super.find(id);
     }
 
-    @GET
-    @Override
-    @Produces(MediaType.APPLICATION_JSON)
-
-    public List<Arancel> findAll() {
-        return super.findAll();
-    }
-
+  
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -103,14 +96,18 @@ public class ArancelFacadeREST extends AbstractFacade<Arancel> {
                 precio = arancelLab.getPrecio();
                 type = "ArancelLaboratorio";
             }
-            //public ArancelDTO(Long id, String nombre, String type, String nombreCategoria, Double precio){
 
-            result.add(new ArancelDTO(arancel.getId(), arancel.getNombre(), type, arancel.getCategoria().getNombreCategoria(), precio));
 
+            result.add(new ArancelDTO(arancel.getId(), arancel.getNombre(), type , arancel.getCategoria().getNombreCategoria(), precio));
+            
         });
-        return Response.status(Response.Status.ACCEPTED).entity(result).build();
+        return Response.status(Response.Status.ACCEPTED).entity(result).build(); 
+ 
+    }  
 
-    }
+  
+ 
+
 
     @GET
     @Path("{from}/{to}")
