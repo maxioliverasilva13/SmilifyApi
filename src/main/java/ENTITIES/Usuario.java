@@ -61,6 +61,11 @@ public class Usuario implements Serializable {
     
     @Column
     @Basic
+    private String avatar;
+    
+    
+    @Column
+    @Basic
     private String password;
     
     @JsonIgnore
@@ -69,6 +74,9 @@ public class Usuario implements Serializable {
     
     @OneToOne(mappedBy="usuario")
     Configuracion configuracion;
+    
+ 
+    
   
 
     public Long getId() {
@@ -129,9 +137,17 @@ public class Usuario implements Serializable {
         this.celular = celular;
     }
     
-     public void setPassword(String password){
+     public void setPassword(String password){ 
         this.password = password;
     }
+     
+     public void setAvatar(String avatar){
+        this.avatar = avatar;
+     }
+     
+     public String getAvatar(){
+         return this.avatar;
+     }
      
     public void setPacientes(List<Paciente> pacientes){
         this.pacientes = pacientes;

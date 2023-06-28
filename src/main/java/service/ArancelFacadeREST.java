@@ -72,30 +72,27 @@ public class ArancelFacadeREST extends AbstractFacade<Arancel> {
     }
 
     @GET
-
-    @Override
-    @Produces( MediaType.APPLICATION_JSON)
-
-    public List<Arancel> findAll() {
-        return super.findAll();
-    }
-    
-    
-    @Consumes( MediaType.APPLICATION_JSON)
-    @Produces( MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON}) 
     public Response listar() {
         //List<Arancel> aranceles = super.findAll();
         List<Arancel> aranceles = super.findAll();
         List<ArancelDTO> result  =  new ArrayList();
+        
 
-        aranceles.forEach(arancel ->{
+       aranceles.forEach(arancel ->{
             double precio;
             String type;
             if(arancel instanceof ArancelPrivado){
               ArancelPrivado arancelPrivado =  (ArancelPrivado)arancel;
               precio = arancelPrivado.getPrecio();
               type = "ArancelPrivado";
-            }else{  // is a arancel colectivo
+              
+            }else if(arancel instanceof ArancelLaboratorio){
+                    ArancelLaboratorio arancelLaboratorio =  (ArancelLaboratorio)arancel;
+                    precio = arancelLaboratorio.getPrecio();
+                    type = "ArancelLaboratorio";
+
+            }else {  // is a arancel colectivo
                 ArancelColectivo arancelColectivo =  (ArancelColectivo)arancel;
                 Configuracion conf =  (Configuracion) this.getEntityManager().createNativeQuery("SELECT * FROM configuracion", Configuracion.class).getSingleResult(); // Primero se guarda la configuracion
                 precio =  (conf.getPrecioPorOrden() * arancelColectivo.getCantOrdenes());
@@ -107,7 +104,7 @@ public class ArancelFacadeREST extends AbstractFacade<Arancel> {
             
         });
         return Response.status(Response.Status.ACCEPTED).entity(result).build(); 
-
+ 
     }  
 
     @GET

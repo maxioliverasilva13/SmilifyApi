@@ -44,9 +44,9 @@ public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Long id, Usuario entity) {
-        super.edit(entity);
-    }
+    public void editMeInfo(@PathParam("id") Long id, Usuario entity) {
+        super.edit(entity);  
+    } 
 
     @DELETE
     @Path("{id}")
@@ -81,6 +81,7 @@ public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
     public String countREST() {
         return String.valueOf(super.count());
     }
+    
 
     @Override
     protected EntityManager getEntityManager() {
