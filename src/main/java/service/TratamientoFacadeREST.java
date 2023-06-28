@@ -92,6 +92,20 @@ public class TratamientoFacadeREST extends AbstractFacade<Tratamiento> {
 
     }
 
+    @PUT
+    @Path("/finalizar/{tratId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response finalizar(@PathParam("tratId") int tratId) {
+        try {
+            em.createNativeQuery("UPDATE tratamiento t SET status = 'Finalizado' WHERE t.id = :id").setParameter("id", tratId).executeUpdate();
+            ResponseMessage res = new ResponseMessage(200, "Tratamiento con el id: " + tratId + " finalizado exitosamente.");
+            return Response.status(Response.Status.CREATED).entity(res).build();
+        } catch (Exception e) {
+            ResponseMessage res = new ResponseMessage(500, e.getMessage());
+            return Response.status(Response.Status.CREATED).entity(res).build();
+        }
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
