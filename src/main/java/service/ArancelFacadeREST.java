@@ -61,7 +61,7 @@ public class ArancelFacadeREST extends AbstractFacade<Arancel> {
     @DELETE
     @Path("{id}")
     public void remove(@PathParam("id") Long id) {
-        super.remove(super.find(id)); 
+        super.remove(super.find(id));
     }
 
     @GET
@@ -71,41 +71,43 @@ public class ArancelFacadeREST extends AbstractFacade<Arancel> {
         return super.find(id);
     }
 
+  
     @GET
-    @Produces({MediaType.APPLICATION_JSON}) 
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response listar() {
         //List<Arancel> aranceles = super.findAll();
         List<Arancel> aranceles = super.findAll();
-        List<ArancelDTO> result  =  new ArrayList();
-        
-
-       aranceles.forEach(arancel ->{
+        List<ArancelDTO> result = new ArrayList();
+        aranceles.forEach(arancel -> {
             double precio;
             String type;
-            if(arancel instanceof ArancelPrivado){
-              ArancelPrivado arancelPrivado =  (ArancelPrivado)arancel;
-              precio = arancelPrivado.getPrecio();
-              type = "ArancelPrivado";
-              
-            }else if(arancel instanceof ArancelLaboratorio){
-                    ArancelLaboratorio arancelLaboratorio =  (ArancelLaboratorio)arancel;
-                    precio = arancelLaboratorio.getPrecio();
-                    type = "ArancelLaboratorio";
-
-            }else {  // is a arancel colectivo
-                ArancelColectivo arancelColectivo =  (ArancelColectivo)arancel;
-                Configuracion conf =  (Configuracion) this.getEntityManager().createNativeQuery("SELECT * FROM configuracion", Configuracion.class).getSingleResult(); // Primero se guarda la configuracion
-                precio =  (conf.getPrecioPorOrden() * arancelColectivo.getCantOrdenes());
+            if (arancel instanceof ArancelPrivado) {
+                ArancelPrivado arancelPrivado = (ArancelPrivado) arancel;
+                precio = arancelPrivado.getPrecio();
+                type = "ArancelPrivado";
+            } else if (arancel instanceof ArancelColectivo) {  // is a arancel colectivo
+                ArancelColectivo arancelColectivo = (ArancelColectivo) arancel;
+                Configuracion conf = (Configuracion) this.getEntityManager().createNativeQuery("SELECT * FROM configuracion", Configuracion.class).getSingleResult(); // Primero se guarda la configuracion
+                precio = (conf.getPrecioPorOrden() * arancelColectivo.getCantOrdenes());
                 type = "ArancelColectivo";
+            } else {
+                ArancelLaboratorio arancelLab = (ArancelLaboratorio) arancel;
+                precio = arancelLab.getPrecio();
+                type = "ArancelLaboratorio";
             }
-           //public ArancelDTO(Long id, String nombre, String type, String nombreCategoria, Double precio){
-           
-            result.add(new ArancelDTO(arancel.getId(), arancel.getNombre(), type , arancel.getCategoria().getNombre(), precio));
+
+
+            result.add(new ArancelDTO(arancel.getId(), arancel.getNombre(), type , arancel.getCategoria().getNombreCategoria(), precio));
             
         });
         return Response.status(Response.Status.ACCEPTED).entity(result).build(); 
  
     }  
+
+  
+ 
+
 
     @GET
     @Path("{from}/{to}")
@@ -118,9 +120,9 @@ public class ArancelFacadeREST extends AbstractFacade<Arancel> {
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
-        return String.valueOf(super.count()); 
+        return String.valueOf(super.count());
     }
-    
+
 //    @GET
 //    @Path("/")
 //    @Consumes({MediaType.APPLICATION_JSON})
@@ -135,14 +137,13 @@ public class ArancelFacadeREST extends AbstractFacade<Arancel> {
 //            return Response.status(500).entity(rm).build();
 //        }
 //    }
-
     @POST
     @Path("/create")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     public Response createArancel(CreateArancelDTO arancelDTO) {
         try {
-            if (arancelDTO.getType().equals("Laboratorio") == false && arancelDTO.getType().equals("Privado") == false && arancelDTO.getType().equals("Colectivo") == false ) {
+            if (arancelDTO.getType().equals("Laboratorio") == false && arancelDTO.getType().equals("Privado") == false && arancelDTO.getType().equals("Colectivo") == false) {
                 throw new Exception("Tipo invalido");
             }
             int categoriaId = arancelDTO.getCategoriaId();

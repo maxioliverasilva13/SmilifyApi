@@ -94,12 +94,12 @@ public class CategoriaArancelFacadeREST extends AbstractFacade<CategoriaArancel>
     @Produces({MediaType.APPLICATION_JSON})
     public Response createArancelCategoria(CategoriaArancel entity) {
         try {
-            List<CategoriaArancel> alreadyExists = (List<CategoriaArancel>)this.em.createNativeQuery("select * from CategoriaArancel where nombre='" + entity.getNombre() + "'", CategoriaArancel.class).getResultList();
+            List<CategoriaArancel> alreadyExists = (List<CategoriaArancel>)this.em.createNativeQuery("select * from CategoriaArancel where nombreCategoria='" + entity.getNombreCategoria() + "'", CategoriaArancel.class).getResultList();
             if (alreadyExists.size() > 0) {
                 throw new Exception("Ya existe una categoria con este nombre");
             } else {
                super.create(entity);
-               CategoriaArancel newArancel = (CategoriaArancel)this.em.createNativeQuery("select * from CategoriaArancel where nombre='" + entity.getNombre() + "'", CategoriaArancel.class).getSingleResult();
+               CategoriaArancel newArancel = (CategoriaArancel)this.em.createNativeQuery("select * from CategoriaArancel where nombreCategoria='" + entity.getNombreCategoria()+ "'", CategoriaArancel.class).getSingleResult();
                return Response.status(200).entity(newArancel).build();
             }
         } catch (Exception e) {
