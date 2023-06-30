@@ -72,7 +72,7 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
             System.out.println("aca 2");
 
 //          newPaciente.setUsuario(user);
-            Date fechaNac = new SimpleDateFormat("dd/MM/yyyy").parse(pacienteData.fechaDeNacimiento);
+            Date fechaNac = new SimpleDateFormat("yyyy/MM/dd").parse(pacienteData.fechaDeNacimiento);
             newPaciente.setFechaDeNacimiento(fechaNac);
 
             Paciente test = super.find(pacienteData.id);
@@ -85,8 +85,8 @@ public class PacienteFacadeREST extends AbstractFacade<Paciente> {
                 super.create(newPaciente);
                 //Long id = this.lastId();
                 //PacienteDTO result = new PacienteDTO(newPaciente.getId(), newPaciente.getNombre(), newPaciente.getApellido(), newPaciente.getTelefono(), newPaciente.getCorreo(), newPaciente.getDireccion(), newPaciente.getFechaDeNacimiento(), newPaciente.getActivo());
-                ResponseMessage res = new ResponseMessage(200, "creado Correctamente");
-                return Response.status(200).entity(res).build();
+                ResponseMessage res = new ResponseMessage(201, "creado Correctamente");
+                return Response.status(201).entity(res).build();
             }
         } catch (Exception e) {
             ResponseMessage res = new ResponseMessage(400, e.getMessage());
