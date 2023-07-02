@@ -100,14 +100,14 @@ public class UsuarioFacadeREST extends AbstractFacade<Usuario> {
        BigInteger Consultas =(BigInteger) getEntityManager().createNativeQuery("select count(consulta.id) from reserva RIGHT join consulta on consulta.reserva_id = reserva.id WHERE reserva.fecha >='" + fechaFormateada + "%';").getSingleResult();
        
       
-       BigInteger Nuevos =(BigInteger) getEntityManager().createNativeQuery("SELECT COUNT(DISTINCT consulta.paciente_id) \n" +
-                                                                                                                                              "FROM reserva \n" +
-                                                                                                                                              "RIGHT JOIN consulta ON consulta.reserva_id = reserva.id \n" +
+       BigInteger Nuevos =(BigInteger) getEntityManager().createNativeQuery("SELECT COUNT(DISTINCT paciente.id) \n" +
+                                                                                                                                              "FROM paciente \n" +
+                                                                                                                                              "RIGHT JOIN reserva ON reserva.paciente_id = paciente.id \n" +
                                                                                                                                               "WHERE reserva.fecha >= '" + fechaFormateada + "'\n" +
-                                                                                                                                              "AND consulta.paciente_id NOT IN (\n" +
-                                                                                                                                              "	SELECT DISTINCT consulta.paciente_id \n" +
-                                                                                                                                              "                 FROM reserva\n" +
-                                                                                                                                                "               RIGHT JOIN consulta ON consulta.reserva_id = reserva.id\n" +
+                                                                                                                                              "AND paciente.id NOT IN (\n" +
+                                                                                                                                              "	SELECT DISTINCT paciente.id  \n" +
+                                                                                                                                              "                 FROM paciente\n" +
+                                                                                                                                                "               RIGHT JOIN reserva ON reserva.paciente_id = paciente.id\n" +
                                                                                                                                                 "               WHERE reserva.fecha < '" + fechaFormateada + "'\n" +
                                                                                                                                                 ");").getSingleResult();
        
